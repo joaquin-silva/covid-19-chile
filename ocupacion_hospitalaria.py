@@ -13,10 +13,15 @@ def get_data():
 
 @st.cache
 def my_plot(df):
+    colors = ["royalblue","skyblue","palevioletred","mediumpurple"]
     fig = go.Figure()
-    for tipo in df.columns[1:]:
-        fig.add_trace(go.Scatter(x=df["Fecha"], y=df[tipo], mode='lines+markers', name=tipo))
-    fig.update_layout(title_text='Ocupación de camas hospitalarias',  xaxis_title='Fecha')
+    for i, tipo in enumerate(df.columns[1:]):
+        fig.add_trace(go.Scatter(x=df["Fecha"], y=df[tipo], mode='lines', name=tipo, marker_color=colors[i]))
+    fig.update_layout(
+        title_text='Ocupación de camas hospitalarias',
+        xaxis_title='Fecha',
+        template='ggplot2'
+        )
     return fig
 
 def main():
