@@ -114,7 +114,9 @@ def main():
     st.header('Datos')
     st.write('Cantidad de defunciones inscritas en el Registro Civil por número de semana.')
     df = get_data()
-    st.write(df)
+    show_df = st.checkbox('Mostrar datos')
+    if show_df:
+        st.write(df.sort_values(by="Año"))
 
     st.header('Gráfico Nacional')
     fig = grafico_nacional(df)
