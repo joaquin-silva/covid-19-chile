@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
 import datetime
@@ -124,16 +123,7 @@ def main():
     st.header('Gráfico por regiones')
     reg = st.selectbox('Region', list(set(df['Region'])))
     fig = grafica_region(df, reg)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True) 
 
-# Sidebar
-'''
-st.sidebar.title('Navegación')
-opt = st.sidebar.radio("",
-    ("Casos", "Defunciones Registro Civil", "Más")
-)
-
-if opt == "Defunciones Registro Civil":
-    main_defunciones()
-'''
-    
+    st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
+    st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
