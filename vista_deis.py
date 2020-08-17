@@ -19,7 +19,7 @@ def get_deaths(data_2020_raw, region, mes):
     deaths = pd.DataFrame()
     deaths['edades'] = age_groups + ['Total']
     for causa in data_2020_raw['causa'].unique():
-        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f"región == '{region}' & edad == '{edades}' & causa == '{causa}'")) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f"región == '{region}' & causa == '{causa}'"))]
+        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & edad == "{edades}" & causa == "{causa}"')) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & causa == "{causa}"'))]
     deaths = deaths.set_index('edades')
 
     deaths_percentage = deaths.apply(lambda x: 100*x/deaths.sum(axis=1))
@@ -95,8 +95,6 @@ def main():
     st.title('Porcentaje de defunciones por causa básica de muerte')
 
     df = get_data()
-	#if st.checkbox("Mostrar datos", value=False): 
-    #    st.write(df)  
 
     regiones = list(set(df['región']))
     regiones.remove('Ignorada')
@@ -113,6 +111,9 @@ def main():
         st.plotly_chart(fig, use_container_width=True) 
     except:
         st.write('Se ha producido un error')
+
+    #if st.checkbox("Mostrar datos", value=False): 
+    #    st.write(df)  
 
     st.markdown('---')
     st.title('Defunciones por género y grupo etario')
