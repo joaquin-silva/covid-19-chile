@@ -12,14 +12,14 @@ def get_data():
     data_2020_raw["mes"] = data_2020_raw["fecha"].dt.month
     return data_2020_raw
 
-@st.cache
+
 def get_deaths(data_2020_raw, region, mes):
     age_groups = ['< 1','1 a 4','5 a 9','10 a 14','15 a 19','20 a 24','25 a 29','30 a 34','35 a 39','40 a 44','45 a 49','50 a 54','55 a 59','60 a 64','65 a 69','70 a 74','75 a 79','80 a 84','85 a 89','90 a 99','100 +']
     
     deaths = pd.DataFrame()
     deaths['edades'] = age_groups + ['Total']
     for causa in data_2020_raw['causa'].unique():
-        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin([mes])].query(f"región == '{region}' & edad == '{edades}' & causa == '{causa}'")) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin([mes])].query(f"región == '{region}' & causa == '{causa}'"))]
+        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f"región == '{region}' & edad == '{edades}' & causa == '{causa}'")) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f"región == '{region}' & causa == '{causa}'"))]
     deaths = deaths.set_index('edades')
 
     deaths_percentage = deaths.apply(lambda x: 100*x/deaths.sum(axis=1))
@@ -31,7 +31,7 @@ def get_deaths(data_2020_raw, region, mes):
     return deaths, deaths_percentage
 
 @st.cache
-def my_plot(df, region, mes):
+def my_plot(df, region):
     df = df.drop(['Total'])
     flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
@@ -46,7 +46,7 @@ def my_plot(df, region, mes):
 
     fig.update_layout(
         barmode='stack',
-        title_text=f'Porcentaje de defunciones en región {region} en {mes} del 2020',
+        title_text=f'Porcentaje de defunciones en región {region}',
         xaxis_title='Porcentaje',
         yaxis_title='Grupo etario'
     )
@@ -104,12 +104,15 @@ def main():
     df_reg = df[df['región']==reg]
 
     meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
-    mes = st.selectbox('Mes', meses)
-    num_mes = int(meses.index(mes)) + 1
-    deaths, deaths_percentage = get_deaths(df_reg, reg, num_mes)
+    mes = st.multiselect('Elegir meses', meses, ['Junio','Julio'])
+    num_mes = [int(meses.index(m)) + 1 for m in mes] 
 
-    fig = my_plot(deaths_percentage, reg, mes)
-    st.plotly_chart(fig, use_container_width=True) 
+    try:
+        deaths, deaths_percentage = get_deaths(df_reg, reg, num_mes)
+        fig = my_plot(deaths_percentage, reg)
+        st.plotly_chart(fig, use_container_width=True) 
+    except:
+        st.write('Se ha producido un error')
 
     st.markdown('---')
     st.title('Defunciones por género y grupo etario')
@@ -122,4 +125,3 @@ def main():
     df_reg = df[df['región']==reg]
     fig = deaths_genre_plot(df_reg)
     st.plotly_chart(fig, use_container_width=True)
-
