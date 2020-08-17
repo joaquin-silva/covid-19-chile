@@ -8,7 +8,6 @@ import calendar
 
 import defunciones_registro
 import casos_covid
-import casos_comuna
 import vista_deis
 import ocupacion_hospitalaria
 
