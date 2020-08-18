@@ -7,7 +7,9 @@ import datetime
 
 @st.cache
 def get_data():
-    data_2020_raw = pd.read_csv("https://raw.githubusercontent.com/alonsosilvaallende/COVID-19/master/data/DEFUNCIONES_FUENTE_DEIS_SOLO_A%C3%91O_2020_2020-08-06.csv")
+    #url = "https://raw.githubusercontent.com/alonsosilvaallende/COVID-19/master/data/DEFUNCIONES_FUENTE_DEIS_SOLO_A%C3%91O_2020_2020-08-06.csv"
+    url = "https://raw.githubusercontent.com/joaquin-silva/covid-19-chile/master/data/data_deis_2020.csv"
+    data_2020_raw = pd.read_csv(url)
     data_2020_raw["fecha"] = pd.to_datetime(data_2020_raw["fecha"])
     data_2020_raw["mes"] = data_2020_raw["fecha"].dt.month
     return data_2020_raw
