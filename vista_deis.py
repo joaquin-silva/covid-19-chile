@@ -12,7 +12,7 @@ def get_data():
     data_2020_raw["mes"] = data_2020_raw["fecha"].dt.month
     return data_2020_raw
 
-
+@st.cache
 def get_deaths(data_2020_raw, region, mes):
     age_groups = ['< 1','1 a 4','5 a 9','10 a 14','15 a 19','20 a 24','25 a 29','30 a 34','35 a 39','40 a 44','45 a 49','50 a 54','55 a 59','60 a 64','65 a 69','70 a 74','75 a 79','80 a 84','85 a 89','90 a 99','100 +']
     
@@ -52,7 +52,6 @@ def my_plot(df, region):
     )
     return fig
 
-@st.cache
 def deaths_genre_plot(df):
     df = df[df['causa']=='COVID-19']
     grouped = df.groupby(["género","edad"])
@@ -91,6 +90,33 @@ def deaths_genre_plot(df):
         )
     return fig
 
+@st.cache
+def my_groupby(data):
+    df = data.groupby(['fecha','región','causa'], as_index=False).count()
+    df = df[df.columns[:4]]
+    df = df.rename(columns={'año':'cantidad'})
+    df = df.sort_values(by=['fecha','causa']).reset_index(drop=True)
+    df['causa'] = [causa[:37] for causa in df['causa']]
+    return df
+
+def my_plot_2(df):
+    df = df.sort_values(by=['causa']).reset_index(drop=True)
+    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+    fig = go.Figure()
+    causas = list(set(df['causa']))[::-1]
+    for i, causa in enumerate(causas):
+        aux = df[df['causa']==causa]
+        aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
+        aux['media movil'] =  aux['cantidad'].rolling(7).mean()
+        fig.add_trace(go.Scatter(
+            x=aux['fecha'],
+            y=aux['media movil'],
+            name=str(causa),
+            mode='lines',
+            marker_color=flatui[i],
+        ))
+    return fig
+
 def main():
     st.title('Porcentaje de defunciones por causa básica de muerte')
 
@@ -125,4 +151,17 @@ def main():
     reg = st.selectbox('Región', regiones, key=1)
     df_reg = df[df['región']==reg]
     fig = deaths_genre_plot(df_reg)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown('---')
+    st.title('Defunciones por causa básica')
+    
+    group = my_groupby(df)
+    reg = st.selectbox('Región', regiones, key=2)
+    df_reg = group[group['región']==reg]
+
+    if st.checkbox("Mostrar datos", value=False): 
+        st.write(df_reg)  
+
+    fig = my_plot_2(df_reg)
     st.plotly_chart(fig, use_container_width=True)
