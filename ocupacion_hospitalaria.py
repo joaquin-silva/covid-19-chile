@@ -28,11 +28,11 @@ def main():
     st.title('Ocupación Hospitalaria Nacional')
 
     df = get_data()
-    if st.checkbox("Mostrar datos", value=False): 
-        st.write(df) 
-
     fig = my_plot(df)
     st.plotly_chart(fig, use_container_width=True)
+
+    if st.checkbox("Mostrar datos", value=False): 
+        st.write(df) 
 
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
     st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
