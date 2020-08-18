@@ -87,7 +87,7 @@ def deaths_genre_plot(df):
         title_text="Defunciones COVID-19 confirmado + sospechoso",
         xaxis_title="Grupo etario",
         yaxis_title="Cantidad de fallecidos"
-        )
+    )
     return fig
 
 @st.cache
@@ -115,6 +115,12 @@ def my_plot_2(df):
             mode='lines',
             marker_color=flatui[i],
         ))
+        fig.update_layout(
+        title_text="Defunciones por causa básica",
+        xaxis_title="Fecha",
+        yaxis_title="Defunciones"
+        )
+
     return fig
 
 def main():
@@ -122,9 +128,10 @@ def main():
 
     df = get_data()
 
+    st.sidebar.markdown('---')
     regiones = list(set(df['región']))
     regiones.remove('Ignorada')
-    reg = st.selectbox('Región', regiones, key=0)
+    reg = st.sidebar.selectbox('Elegir Región', regiones, key=0)
     df_reg = df[df['región']==reg]
 
     meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
@@ -135,33 +142,32 @@ def main():
         deaths, deaths_percentage = get_deaths(df_reg, reg, num_mes)
         fig = my_plot(deaths_percentage, reg)
         st.plotly_chart(fig, use_container_width=True) 
+
+        if st.checkbox("Mostrar datos", value=False): 
+            st.write(deaths_percentage)  
     except:
         st.write('Se ha producido un error')
 
-    #if st.checkbox("Mostrar datos", value=False): 
-    #    st.write(df)  
-
     st.markdown('---')
     st.title('Defunciones por género y grupo etario')
-    st.header('Nacional')
+    st.header('Gráfico Nacional')
     fig = deaths_genre_plot(df)
     st.plotly_chart(fig, use_container_width=True)
 
-    st.header('Por región')
-    reg = st.selectbox('Región', regiones, key=1)
-    df_reg = df[df['región']==reg]
+    st.header(f'Gráfico Región {reg}')
+
     fig = deaths_genre_plot(df_reg)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown('---')
     st.title('Defunciones por causa básica')
-    
-    group = my_groupby(df)
-    reg = st.selectbox('Región', regiones, key=2)
-    df_reg = group[group['región']==reg]
 
-    if st.checkbox("Mostrar datos", value=False): 
-        st.write(df_reg)  
+    st.header(f'Gráfico Región {reg}')
+    group = my_groupby(df)
+    df_reg = group[group['región']==reg]
 
     fig = my_plot_2(df_reg)
     st.plotly_chart(fig, use_container_width=True)
+
+    if st.checkbox("Mostrar datos", value=False): 
+        st.write(df_reg)  
