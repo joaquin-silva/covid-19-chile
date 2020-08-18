@@ -143,7 +143,7 @@ def main():
         fig = my_plot(deaths_percentage, reg)
         st.plotly_chart(fig, use_container_width=True) 
 
-        if st.checkbox("Mostrar datos", value=False): 
+        if st.checkbox("Mostrar datos", value=False, key=0): 
             st.write(deaths_percentage)  
     except:
         st.write('Se ha producido un error')
@@ -169,5 +169,5 @@ def main():
     fig = my_plot_2(df_reg)
     st.plotly_chart(fig, use_container_width=True)
 
-    if st.checkbox("Mostrar datos", value=False): 
+    if st.checkbox("Mostrar datos", value=False, key=1): 
         st.write(df_reg)  
