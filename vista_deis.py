@@ -7,7 +7,6 @@ import datetime
 
 @st.cache
 def get_data():
-    #url = "https://raw.githubusercontent.com/alonsosilvaallende/COVID-19/master/data/DEFUNCIONES_FUENTE_DEIS_SOLO_A%C3%91O_2020_2020-08-06.csv"
     url = "https://raw.githubusercontent.com/joaquin-silva/covid-19-chile/master/data/data_deis_2020.csv"
     data_2020_raw = pd.read_csv(url)
     data_2020_raw["fecha"] = pd.to_datetime(data_2020_raw["fecha"])
@@ -117,24 +116,77 @@ def my_plot_2(df):
             mode='lines',
             marker_color=flatui[i],
         ))
-        fig.update_layout(
-        title_text="Defunciones por causa básica",
+    fig.update_layout(
+    title_text="Defunciones por causa básica",
+    xaxis_title="Fecha",
+    yaxis_title="Defunciones"
+    )
+    return fig
+
+@st.cache
+def my_groupby_2(data):
+    df = data.groupby(['fecha','región','causa_detalle'], as_index=False).count()
+    df = df[df.columns[:4]]
+    df = df.rename(columns={'año':'cantidad'})
+    df = df.sort_values(by=['fecha']).reset_index(drop=True)
+    return df
+
+@st.cache
+def my_groupby_3(data):
+    df = data.groupby(['fecha','causa_detalle'], as_index=False).count()
+    df = df[df.columns[:3]]
+    df = df.rename(columns={'año':'cantidad'})
+    df = df.sort_values(by=['fecha']).reset_index(drop=True)
+    return df
+
+def my_plot_3(df):
+    colors = ['#1f77b4','#d62728']
+    fig = go.Figure()
+    causas = list(set(df['causa_detalle']))
+    for i, causa in enumerate(causas):
+        aux = df[df['causa_detalle']==causa]
+        aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
+        fig.add_trace(go.Bar(
+            x=aux['fecha'],
+            y=aux['cantidad'],
+            name=str(causa),
+            marker_color=colors[i],
+        ))
+
+    fig.update_layout(
+        title_text="Defunciones Covid-19 confirmado y sospechoso",
+        barmode="stack",
         xaxis_title="Fecha",
         yaxis_title="Defunciones"
-        )
-
+    )
     return fig
 
 def main():
-    st.title('Porcentaje de defunciones por causa básica de muerte')
-
     df = get_data()
+    df_covid = df[df["causa"]=='COVID-19'].reset_index(drop=True)
 
     st.sidebar.markdown('---')
     regiones = list(set(df['región']))
     regiones.remove('Ignorada')
-    reg = st.sidebar.selectbox('Elegir Región', regiones, key=0)
+    reg = st.sidebar.selectbox('Elegir Región', regiones, key=0, index=regiones.index('Metropolitana de Santiago'))
     df_reg = df[df['región']==reg]
+
+    st.title('Defunciones Covid-19 por fecha')
+
+    st.header('Gráfico Nacional')
+    group = my_groupby_3(df_covid)
+    fig = my_plot_3(group)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.header(f'Gráfico Región {reg}')
+    group = my_groupby_2(df_covid)
+    df_reg_covid = group[group['región']==reg]
+
+    fig = my_plot_3(df_reg_covid)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown('---')
+    st.title('Porcentaje de defunciones por causa básica de muerte')
 
     meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
     mes = st.multiselect('Elegir meses', meses, ['Junio','Julio'])

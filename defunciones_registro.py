@@ -123,7 +123,8 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
 
     st.header('Gráfico por regiones')
-    reg = st.selectbox('Region', list(set(df['Region'])))
+    regiones = list(set(df['Region']))
+    reg = st.selectbox('Region', regiones, index=regiones.index('Metropolitana de Santiago'))
     fig = grafica_region(df, reg)
     st.plotly_chart(fig, use_container_width=True) 
 
