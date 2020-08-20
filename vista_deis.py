@@ -100,7 +100,7 @@ def my_groupby(data):
     df['causa'] = [causa[:37] for causa in df['causa']]
     return df
 
-def my_plot_2(df):
+def my_plot_2(df, op):
     df = df.sort_values(by=['causa']).reset_index(drop=True)
     flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
@@ -108,10 +108,13 @@ def my_plot_2(df):
     for i, causa in enumerate(causas):
         aux = df[df['causa']==causa]
         aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
-        aux['media movil'] =  aux['cantidad'].rolling(7).mean()
+        if op:
+            y =  aux['cantidad'].rolling(7).mean()
+        else:
+            y = aux['cantidad']
         fig.add_trace(go.Scatter(
             x=aux['fecha'],
-            y=aux['media movil'],
+            y=y,
             name=str(causa),
             mode='lines',
             marker_color=flatui[i],
@@ -220,7 +223,8 @@ def main():
     group = my_groupby(df)
     df_reg = group[group['región']==reg]
 
-    fig = my_plot_2(df_reg)
+    op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True)
+    fig = my_plot_2(df_reg, op)
     st.plotly_chart(fig, use_container_width=True)
 
     if st.checkbox("Mostrar datos", value=False, key=1): 

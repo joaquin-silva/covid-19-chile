@@ -10,6 +10,7 @@ import defunciones_registro
 import casos_covid
 import vista_deis
 import ocupacion_hospitalaria
+import vista_icovid
 
 # cd Downloads\Python\Streamlit
 # streamlit run app.py    
@@ -24,7 +25,7 @@ st.beta_set_page_config(
 # Sidebar   
 st.sidebar.title('Navegación')
 opt = st.sidebar.radio("",
-    ("Casos", "Defunciones Registro Civil", "Datos Deis", "Ocupación Hospitalaria")
+    ("Casos", "Defunciones Registro Civil", "Datos Deis", "Ocupación Hospitalaria","Positivad Diaria")
 )
 
 if opt == "Defunciones Registro Civil":
@@ -38,3 +39,6 @@ if opt == "Datos Deis":
 
 if opt == "Ocupación Hospitalaria":
     ocupacion_hospitalaria.main()
+
+if opt == "Positivad Diaria":
+    vista_icovid.main()
