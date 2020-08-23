@@ -7,7 +7,7 @@ import datetime
 
 @st.cache
 def get_data():
-    url = "https://raw.githubusercontent.com/joaquin-silva/covid-19-chile/master/data/data_deis_2020.csv"
+    url = "https://raw.githubusercontent.com/joaquin-silva/covid-19-chile/master/data/new_data_deis_2020.csv"
     data_2020_raw = pd.read_csv(url)
     data_2020_raw["fecha"] = pd.to_datetime(data_2020_raw["fecha"])
     data_2020_raw["mes"] = data_2020_raw["fecha"].dt.month
@@ -20,7 +20,7 @@ def get_deaths(data_2020_raw, region, mes):
     deaths = pd.DataFrame()
     deaths['edades'] = age_groups + ['Total']
     for causa in data_2020_raw['causa'].unique():
-        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & edad == "{edades}" & causa == "{causa}"')) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & causa == "{causa}"'))]
+        deaths[causa] = [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & grupo_edad == "{edades}" & causa == "{causa}"')) for edades in age_groups] + [len(data_2020_raw[data_2020_raw["mes"].isin(mes)].query(f'región == "{region}" & causa == "{causa}"'))]
     deaths = deaths.set_index('edades')
 
     deaths_percentage = deaths.apply(lambda x: 100*x/deaths.sum(axis=1))
@@ -55,7 +55,7 @@ def my_plot(df, region):
 
 def deaths_genre_plot(df):
     df = df[df['causa']=='COVID-19']
-    grouped = df.groupby(["género","edad"])
+    grouped = df.groupby(["género","grupo_edad"])
     l_genero = []
     l_edad = []
     l_def = []
@@ -63,11 +63,6 @@ def deaths_genre_plot(df):
         l_genero.append(name[0])
         l_edad.append(name[1])
         l_def.append(group.shape[0])
-
-    if len(l_genero) < 42:
-        l_genero.append("Hombre")
-        l_edad.append("5 a 9")
-        l_def.append(0)
 
     data_deis_grouped = pd.DataFrame({"genero":l_genero,"edad":l_edad,"fallecidos":l_def})
 
@@ -146,13 +141,14 @@ def my_plot_3(df):
     colors = ['#1f77b4','#d62728']
     fig = go.Figure()
     causas = list(set(df['causa_detalle']))
+    names = ['Covid-19, sospechoso', 'Covid-19, confirmado']
     for i, causa in enumerate(causas):
         aux = df[df['causa_detalle']==causa]
         aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
         fig.add_trace(go.Bar(
             x=aux['fecha'],
             y=aux['cantidad'],
-            name=str(causa),
+            name=names[i],
             marker_color=colors[i],
         ))
 
