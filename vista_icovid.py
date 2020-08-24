@@ -66,6 +66,7 @@ def main():
     
     df = get_data_reg()
     l_reg = list(set(df['Region']))
+    l_reg = [x for x in l_reg if str(x)!='nan']   
     regiones = st.multiselect('Regiones', l_reg, l_reg, key=0)
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=0)
