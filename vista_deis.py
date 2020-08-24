@@ -138,10 +138,11 @@ def my_groupby_3(data):
     return df
 
 def my_plot_3(df):
-    colors = ['#1f77b4','#d62728']
+    colors = ['#d62728','#1f77b4']
     fig = go.Figure()
-    causas = list(set(df['causa_detalle']))
-    names = ['Covid-19, sospechoso', 'Covid-19, confirmado']
+    #causas = list(set(df['causa_detalle']))
+    causas = ['COVID-19, virus identificado','COVID-19, virus no identificado']
+    names = ['Covid-19, confirmado','Covid-19, sospechoso']
     for i, causa in enumerate(causas):
         aux = df[df['causa_detalle']==causa]
         aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
