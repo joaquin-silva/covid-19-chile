@@ -11,6 +11,8 @@ def get_data():
     data_2020_raw = pd.read_csv(url)
     data_2020_raw["fecha"] = pd.to_datetime(data_2020_raw["fecha"])
     data_2020_raw["mes"] = data_2020_raw["fecha"].dt.month
+    sent_to = {1:"Enero",2:"Febrero",3:"Marzo",4:"Abril",5:"Mayo",6:"Junio",7:"Julio",8:"Agosto",9:"Septiembre",10:"Octubre",11:"Noviembre",12:"Diciembre"}
+    data_2020_raw["nombre_mes"] = data_2020_raw['mes'].map(sent_to)
     return data_2020_raw
 
 @st.cache
@@ -99,7 +101,7 @@ def my_plot_2(df, op):
     df = df.sort_values(by=['causa']).reset_index(drop=True)
     flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
-    causas = list(set(df['causa']))[::-1]
+    causas = list(set(df['causa']))
     for i, causa in enumerate(causas):
         aux = df[df['causa']==causa]
         aux = aux.sort_values(by=['fecha']).reset_index(drop=True)
@@ -158,6 +160,32 @@ def my_plot_3(df):
         barmode="stack",
         xaxis_title="Fecha",
         yaxis_title="Defunciones"
+    )
+    return fig
+
+@st.cache
+def my_groupby_4(df):
+    data = df.groupby(['región','comuna','mes','nombre_mes'], as_index=False).count()
+    data =data[data.columns[:5]]
+    data = data.rename(columns={'año':'cantidad'})
+    data = data.sort_values(by=['mes']).reset_index(drop=True)
+    return data
+
+def my_plot_4(df):
+    fig = go.Figure(data=go.Heatmap(
+        z=df['cantidad'],
+        x=df['nombre_mes'],
+        y=df['comuna'],
+        colorscale='inferno_r'
+        ))
+
+    fig.update_layout(
+        title='Defunciones Covid-19 confirmado + sospechoso',
+        xaxis_title="Mes",
+        template='ggplot2',
+        autosize=False,
+        width=800,
+        height=1100,
     )
     return fig
 
@@ -226,3 +254,11 @@ def main():
 
     if st.checkbox("Mostrar datos", value=False, key=1): 
         st.write(df_reg)  
+
+    st.markdown('---')
+    st.title(f'Defunciones Región {reg} por comuna')
+
+    df_reg_covid = df_covid[df_covid['región']==reg]
+    group = my_groupby_4(df_reg_covid)
+    fig = my_plot_4(group)
+    st.plotly_chart(fig, use_container_width=True)
