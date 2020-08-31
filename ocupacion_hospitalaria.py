@@ -11,7 +11,6 @@ def get_data():
     df = df.rename(columns={"Tipo de cama": "Fecha"})
     return df
 
-@st.cache
 def my_plot(df):
     colors = ["royalblue","skyblue","palevioletred","mediumpurple"]
     fig = go.Figure()
@@ -20,7 +19,7 @@ def my_plot(df):
     fig.update_layout(
         title_text='Ocupación de camas hospitalarias',
         xaxis_title='Fecha',
-        template='ggplot2'
+        template='ggplot2',
         )
     return fig
 
