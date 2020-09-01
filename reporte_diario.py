@@ -105,7 +105,7 @@ def my_join():
     df_vent = data_ventiladores()
     df_criticos = data_criticos()
     df_nac = data_nacionales()
-    df_nac = df_nac[['Fecha','nuevos fallecidos','Casos totales']]
+    df_nac = df_nac[['Fecha','nuevos fallecidos','Casos totales','Fallecidos']]
 
     df = df_pos.join(df_vent.set_index('Fecha'), on='Fecha')
     df = df.join(df_criticos.set_index('Fecha'), on='Fecha')
@@ -115,16 +115,36 @@ def my_join():
         'Test informados',
         'Casos nuevos',
         'Positividad',
-        'Media movil positividad',
+        'Media móvil positividad',
         'Ventiladores totales',    
         'Ventiladores disponibles',
         'Ventiladores ocupados',
         'Pacientes críticos',
         'Nuevos fallecidos',
-        'Casos totales'
+        'Casos totales',
+        'Fallecidos totales'
         ]
+
     df['Media móvil casos nuevos'] = df['Casos nuevos'].rolling(7).mean()
     df['Media móvil nuevos fallecidos'] = df['Nuevos fallecidos'].rolling(7).mean()
+
+    df = df[[
+        'Fecha reporte',
+        'Casos nuevos',
+        'Media móvil casos nuevos',
+        'Casos totales',
+        'Nuevos fallecidos',
+        'Media móvil nuevos fallecidos',
+        'Fallecidos totales',
+        'Positividad',
+        'Media móvil positividad',
+        'Test informados',
+        'Ventiladores totales',    
+        'Ventiladores disponibles',
+        'Ventiladores ocupados',
+        'Pacientes críticos'
+    ]]
+    
     return df
 
 def main():
