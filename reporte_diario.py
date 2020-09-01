@@ -75,7 +75,6 @@ def my_plot(df, col, referencia, tipo):
     elif referencia == '14 días atrás':
         ref = df[col][df.shape[0]-15]
 
-
     if tipo == 'Diferencia':
         delta = {"reference": ref}
     elif tipo == 'Porcentaje':
@@ -105,7 +104,7 @@ def my_join():
     df_vent = data_ventiladores()
     df_criticos = data_criticos()
     df_nac = data_nacionales()
-    df_nac = df_nac[['Fecha','nuevos fallecidos','Casos totales','Fallecidos']]
+    df_nac = df_nac[['Fecha','nuevos fallecidos','Casos totales','Fallecidos','Casos nuevos con sintomas','Casos nuevos sin sintomas','Casos activos']]
 
     df = df_pos.join(df_vent.set_index('Fecha'), on='Fecha')
     df = df.join(df_criticos.set_index('Fecha'), on='Fecha')
@@ -122,15 +121,20 @@ def my_join():
         'Pacientes críticos',
         'Nuevos fallecidos',
         'Casos totales',
-        'Fallecidos totales'
+        'Fallecidos totales',
+        'Casos nuevos con síntomas',
+        'Casos nuevos sin síntomas',
+        'Casos activos'
         ]
 
     df['Media móvil casos nuevos'] = df['Casos nuevos'].rolling(7).mean()
     df['Media móvil nuevos fallecidos'] = df['Nuevos fallecidos'].rolling(7).mean()
-    '''
+    
     df = df[[
         'Fecha reporte',
         'Casos nuevos',
+        'Casos nuevos con síntomas',
+        'Casos nuevos sin síntomas',
         'Media móvil casos nuevos',
         'Casos totales',
         'Nuevos fallecidos',
@@ -139,12 +143,13 @@ def my_join():
         'Positividad',
         'Media móvil positividad',
         'Test informados',
+        'Casos activos',
+        'Pacientes críticos',
         'Ventiladores totales',    
         'Ventiladores disponibles',
-        'Ventiladores ocupados',
-        'Pacientes críticos'
+        'Ventiladores ocupados'   
     ]]
-    '''
+    
     return df
 
 def main():
@@ -166,9 +171,11 @@ def main():
 
     st.header('Más indicadores')
 
-    col = list(set(list(df.columns[1:])).difference(set(columns)))
+    cols = list(df.columns[1:])
+    for col in columns:
+        cols.remove(col)
 
-    ind =  st.selectbox('Indicador', col)
+    ind =  st.selectbox('Indicador', cols)
     fig = my_plot(df, ind, referencia, tipo)
     st.plotly_chart(fig, use_container_width=True)
 
