@@ -74,6 +74,8 @@ def my_plot(df, col, referencia, tipo):
         ref = df[col][df.shape[0]-8]
     elif referencia == '14 días atrás':
         ref = df[col][df.shape[0]-15]
+    elif referencia == '21 días atrás':
+        ref = df[col][df.shape[0]-22]
 
     if tipo == 'Diferencia':
         delta = {"reference": ref}
@@ -155,10 +157,11 @@ def my_join():
 def main():
     df = my_join()    
 
-    st.title('Reporte Diario')
+    st.title('Reporte Diario Nacional')
+    st.markdown(f"**Última actualización: {str(df['Fecha reporte'][df.shape[0]-1]).split()[0]}**")
 
     st.sidebar.markdown('---')
-    referencia = st.sidebar.selectbox('Referencia del indicador', ['Día anterior','7 días atrás','14 días atrás'])
+    referencia = st.sidebar.selectbox('Referencia del indicador', ['Día anterior','7 días atrás','14 días atrás','21 días atrás'])
     tipo = st.sidebar.selectbox('Tipo de referencia', ['Diferencia','Porcentaje'])
 
     columns = ['Casos nuevos','Nuevos fallecidos','Positividad']
