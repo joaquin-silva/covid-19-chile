@@ -127,7 +127,7 @@ def my_join():
 
     df['Media móvil casos nuevos'] = df['Casos nuevos'].rolling(7).mean()
     df['Media móvil nuevos fallecidos'] = df['Nuevos fallecidos'].rolling(7).mean()
-
+    '''
     df = df[[
         'Fecha reporte',
         'Casos nuevos',
@@ -144,7 +144,7 @@ def my_join():
         'Ventiladores ocupados',
         'Pacientes críticos'
     ]]
-    
+    '''
     return df
 
 def main():
@@ -166,7 +166,9 @@ def main():
 
     st.header('Más indicadores')
 
-    ind =  st.selectbox('Indicador', list(df.columns[1:]))
+    col = list(set(list(df.columns[1:])).difference(set(columns)))
+
+    ind =  st.selectbox('Indicador', col)
     fig = my_plot(df, ind, referencia, tipo)
     st.plotly_chart(fig, use_container_width=True)
 
