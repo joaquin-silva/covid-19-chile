@@ -195,5 +195,9 @@ def main():
     data = report_data(df)
     st.table(data)
 
+    st.markdown("---")
+    st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
+    st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
+
 if __name__ == "__main__":
     main()
