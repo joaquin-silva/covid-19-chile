@@ -68,6 +68,7 @@ def main():
    
     df = get_data_sochimi()
     regiones = list(set(df['Region']))
+    st.sidebar.markdown("---")
     reg = st.sidebar.selectbox('Elegir Región', regiones, key=0, index=regiones.index('Metropolitana'))
 
     if st.checkbox("Mostrar datos", value=False, key=1): 
