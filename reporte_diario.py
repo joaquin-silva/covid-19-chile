@@ -164,7 +164,12 @@ def main():
     referencia = st.sidebar.selectbox('Referencia del indicador', ['Día anterior','7 días atrás','14 días atrás','21 días atrás'])
     tipo = st.sidebar.selectbox('Tipo de referencia', ['Diferencia','Porcentaje'])
 
-    columns = ['Casos nuevos','Nuevos fallecidos','Positividad']
+    op = st.checkbox("Ver media móvil 7 días", value=False)
+
+    if op:
+        columns = ['Media móvil casos nuevos','Media móvil nuevos fallecidos','Media móvil positividad']
+    else:
+        columns = ['Casos nuevos','Nuevos fallecidos','Positividad']
 
     for col in columns:
 
