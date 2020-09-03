@@ -29,7 +29,7 @@ st.beta_set_page_config(
 st.sidebar.title('Navegación')
 opt = st.sidebar.radio("",
     ("Reporte Diario",
-    "Casos",
+    "Casos por región",
     "Casos por comuna",
     "Defunciones Registro Civil",
     "Datos Deis",
@@ -41,7 +41,7 @@ opt = st.sidebar.radio("",
 if opt == "Defunciones Registro Civil":
     defunciones_registro.main()
 
-if opt == "Casos":
+if opt == "Casos por región":
     casos_covid.main()
 
 if opt == "Datos Deis":
