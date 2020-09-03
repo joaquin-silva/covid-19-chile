@@ -128,5 +128,6 @@ def main():
     fig = grafica_region(df, reg)
     st.plotly_chart(fig, use_container_width=True) 
 
+    st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
     st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
