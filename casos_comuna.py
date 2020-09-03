@@ -19,7 +19,7 @@ def get_data_inicio_sintomas():
     df['Casos 100 mil'] = 100000*df['Casos confirmados']/df['Poblacion']
     return df
 
-def new_cases_plot(df, op):
+def new_cases_plot(df, op, op_data):
     if op:
         y = df['Casos 100 mil']
     else:
@@ -27,14 +27,14 @@ def new_cases_plot(df, op):
     fig = go.Figure()
     fig.add_trace(go.Bar(x=df['Numero Semana'], y=y, marker_color='cadetblue'))
     fig.update_layout(
-        title='Casos nuevos por semana epidemiológica',
+        title=f'{op_data} por semana epidemiológica',
         xaxis_title="Semana epidemiológica",
-        yaxis_title="Casos nuevos",
+        yaxis_title="Casos",
         template='ggplot2'
     )
     return fig
 
-def my_plot(df, comunas, op):
+def my_plot(df, comunas, op, op_data):
     colors = ['#d62728','#1f77b4', '#ff7f0e', '#2ca02c', '#ff9896', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22']
     fig = go.Figure()
     for i, comuna in enumerate(comunas):
@@ -47,9 +47,9 @@ def my_plot(df, comunas, op):
     
     fig.update_layout(
         barmode='group',
-        title='Casos nuevos por semana epidemiológica',
+        title=f'{op_data} por semana epidemiológica',
         xaxis_title="Semana epidemiológica",
-        yaxis_title="Casos nuevos",
+        yaxis_title="Casos",
         template='ggplot2'
     )
     return fig
@@ -59,24 +59,25 @@ def main():
     
     st.sidebar.markdown('---')
     st.sidebar.markdown('Opciones')
-    op_data = st.sidebar.checkbox('Ver casos por fecha de inicio de sintomas', value=False, key=0)
-
-    if op_data:
-        df = get_data_inicio_sintomas()
-    else:
+    op_data = st.sidebar.selectbox('Datos', ['Casos confirmados','Casos nuevos por fecha de inicio de síntomas'], key=0)
+    
+    if op_data == 'Casos confirmados':
         df = get_data()
+    if op_data == 'Casos nuevos por fecha de inicio de síntomas':
+        df = get_data_inicio_sintomas()
+    
 
-    op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=1)
+    op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=0)
 
     regiones = list(set(df['Region']))
-    reg = st.selectbox('Región', regiones, index=regiones.index('Metropolitana'))
+    reg = st.selectbox('Región', regiones, index=regiones.index('Metropolitana'), key=1)
     df_reg = df[df['Region']==reg]
 
     comunas = list(set(df_reg['Comuna']))
     comuna = st.selectbox('Comuna', comunas)
     df_com = df_reg[df_reg['Comuna']==comuna]
 
-    fig = new_cases_plot(df_com, op)
+    fig = new_cases_plot(df_com, op, op_data)
     st.plotly_chart(fig, use_container_width=True) 
 
     st.markdown('---')
@@ -85,10 +86,12 @@ def main():
     comunas = list(set(df['Comuna']))
     select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Las Condes','Punta Arenas'])
     try:
-        fig = my_plot(df, select, op)
+        fig = my_plot(df, select, op, op_data)
         st.plotly_chart(fig, use_container_width=True) 
     except:
         st.write('Demasiadas comunas seleccionadas')
+
+    st.markdown("**Nota:** Los datos de las últimas semanas se pueden ir ajustando con el paso del tiempo.")
 
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
