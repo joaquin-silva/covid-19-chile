@@ -28,7 +28,7 @@ def new_cases_plot(df, op, op_data, op_plot):
     if op_plot == 'Barras':
         fig.add_trace(go.Bar(x=df['Numero Semana'], y=y, marker_color='cadetblue'))
     if op_plot == 'Lineas':
-        fig.add_trace(go.Scatter(x=df['Numero Semana'][:-1], y=y[:-1], marker_color='cadetblue', mode='lines'))
+        fig.add_trace(go.Scatter(x=df['Numero Semana'], y=y, marker_color='cadetblue', mode='lines'))
     fig.update_layout(
         title=f'{op_data} por semana epidemiológica',
         xaxis_title="Semana epidemiológica",
@@ -49,7 +49,7 @@ def my_plot(df, comunas, op, op_data, op_plot):
         if op_plot == 'Barras':
             fig.add_trace(go.Bar(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i]))
         if op_plot == 'Lineas':
-            fig.add_trace(go.Scatter(x=aux['Numero Semana'][:-1], y=y[:-1], name=comuna, marker_color=colors[i], mode='lines'))
+            fig.add_trace(go.Scatter(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i], mode='lines'))
     fig.update_layout(
         barmode='group',
         title=f'{op_data} por semana epidemiológica',
