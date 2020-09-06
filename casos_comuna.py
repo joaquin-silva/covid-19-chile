@@ -19,13 +19,16 @@ def get_data_inicio_sintomas():
     df['Casos 100 mil'] = 100000*df['Casos confirmados']/df['Poblacion']
     return df
 
-def new_cases_plot(df, op, op_data):
+def new_cases_plot(df, op, op_data, op_plot):
     if op:
         y = df['Casos 100 mil']
     else:
         y = df['Casos confirmados']
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=df['Numero Semana'], y=y, marker_color='cadetblue'))
+    if op_plot == 'Barras':
+        fig.add_trace(go.Bar(x=df['Numero Semana'], y=y, marker_color='cadetblue'))
+    if op_plot == 'Lineas':
+        fig.add_trace(go.Scatter(x=df['Numero Semana'][:-1], y=y[:-1], marker_color='cadetblue', mode='lines'))
     fig.update_layout(
         title=f'{op_data} por semana epidemiológica',
         xaxis_title="Semana epidemiológica",
@@ -34,7 +37,7 @@ def new_cases_plot(df, op, op_data):
     )
     return fig
 
-def my_plot(df, comunas, op, op_data):
+def my_plot(df, comunas, op, op_data, op_plot):
     colors = ['#d62728','#1f77b4', '#ff7f0e', '#2ca02c', '#ff9896', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22']
     fig = go.Figure()
     for i, comuna in enumerate(comunas):
@@ -43,8 +46,10 @@ def my_plot(df, comunas, op, op_data):
             y = aux['Casos 100 mil']
         else:
             y = aux['Casos confirmados']
-        fig.add_trace(go.Bar(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i]))
-    
+        if op_plot == 'Barras':
+            fig.add_trace(go.Bar(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i]))
+        if op_plot == 'Lineas':
+            fig.add_trace(go.Scatter(x=aux['Numero Semana'][:-1], y=y[:-1], name=comuna, marker_color=colors[i], mode='lines'))
     fig.update_layout(
         barmode='group',
         title=f'{op_data} por semana epidemiológica',
@@ -65,8 +70,8 @@ def main():
         df = get_data()
     if op_data == 'Casos nuevos por fecha de inicio de síntomas':
         df = get_data_inicio_sintomas()
-    
 
+    op_plot = st.sidebar.selectbox('Tipo gráfico', ['Lineas','Barras'])
     op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=0)
 
     regiones = list(set(df['Region']))
@@ -77,7 +82,7 @@ def main():
     comuna = st.selectbox('Comuna', comunas)
     df_com = df_reg[df_reg['Comuna']==comuna]
 
-    fig = new_cases_plot(df_com, op, op_data)
+    fig = new_cases_plot(df_com, op, op_data, op_plot)
     st.plotly_chart(fig, use_container_width=True) 
 
     st.markdown('---')
@@ -86,7 +91,7 @@ def main():
     comunas = list(set(df['Comuna']))
     select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Las Condes','Punta Arenas'])
     try:
-        fig = my_plot(df, select, op, op_data)
+        fig = my_plot(df, select, op, op_data, op_plot)
         st.plotly_chart(fig, use_container_width=True) 
     except:
         st.write('Demasiadas comunas seleccionadas')
