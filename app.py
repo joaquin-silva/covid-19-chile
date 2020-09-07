@@ -49,7 +49,7 @@ if opt == "Casos por región":
 if opt == "Datos Deis":
     vista_deis.main()
 
-if opt == "Ocupación hospitalaria":
+if opt == "Ocupación Hospitalaria":
     ocupacion_hospitalaria.main()
 
 if opt == "Positivad Diaria":
