@@ -30,7 +30,7 @@ def new_cases_plot(df, op, op_data, op_plot):
     if op_plot == 'Lineas':
         fig.add_trace(go.Scatter(x=df['Numero Semana'], y=y, marker_color='cadetblue', mode='lines'))
     fig.update_layout(
-        title=f'{op_data} por semana epidemiológica',
+        title=f'{op_data} por semana epidemiológica en {list(set(df["Comuna"]))[0}',
         xaxis_title="Semana epidemiológica",
         yaxis_title="Casos",
         template='ggplot2'
