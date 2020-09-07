@@ -21,7 +21,13 @@ def my_groupby(df):
 def plot_mas_activos(data):
     cant = 20
     fig = go.Figure()
-    fig.add_trace(go.Bar(y=data['Comuna'][:cant][::-1], x=data['Casos activos'][:cant][::-1], orientation='h', marker_color='steelblue'))
+    fig.add_trace(go.Bar(
+        y=data['Comuna'][:cant][::-1],
+        x=data['Casos activos'][:cant][::-1],
+        text=data['Casos activos'][:cant][::-1],
+        textposition='inside',
+        orientation='h',
+        marker_color='steelblue'))
     fig.update_layout(
         title=f'Las {cant} comunas con más casos activos',
         xaxis_title='Casos activos',
@@ -32,10 +38,16 @@ def plot_mas_activos(data):
 
 def plot_reg(data):
     fig = go.Figure()
-    fig.add_trace(go.Bar(y=data['Comuna'][::-1], x=data['Casos activos'][::-1], orientation='h', marker_color='steelblue'))
+    fig.add_trace(go.Bar(
+        y=data['Comuna'][::-1],
+        x=data['Casos activos'][::-1],
+        text=data['Casos activos'][::-1],
+        textposition='inside',
+        orientation='h',
+        marker_color='steelblue'))
     
     if data.shape[0] > 25:
-        height = 22*data.shape[0]
+        height = 25*data.shape[0]
     else:
         height = 500
 
