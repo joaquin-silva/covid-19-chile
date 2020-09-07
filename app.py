@@ -14,6 +14,7 @@ import ocupacion_hospitalaria
 import vista_icovid
 import reporte_diario
 import casos_comuna
+import casos_activos
 
 # cd Downloads\Python\Streamlit\Covid-19
 # streamlit run app.py    
@@ -34,7 +35,8 @@ opt = st.sidebar.radio("",
     "Defunciones Registro Civil",
     "Datos Deis",
     "Ocupación Hospitalaria",
-    "Positivad Diaria"
+    "Positivad Diaria",
+    "Casos Activos"
     )
 )
 
@@ -47,7 +49,7 @@ if opt == "Casos por región":
 if opt == "Datos Deis":
     vista_deis.main()
 
-if opt == "Ocupación Hospitalaria":
+if opt == "Ocupación hospitalaria":
     ocupacion_hospitalaria.main()
 
 if opt == "Positivad Diaria":
@@ -58,3 +60,6 @@ if opt == "Reporte Diario":
 
 if opt == "Casos por comuna":
     casos_comuna.main()
+
+if opt == "Casos Activos":
+    casos_activos.main()

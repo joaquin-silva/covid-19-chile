@@ -29,6 +29,7 @@ def my_plot(df, comunas, op):
             y=100*y,
             name=str(comuna),
             mode='lines'
+            
         ))
     fig.update_layout(
         title_text="Positividad Exámenes PCR",
@@ -67,7 +68,7 @@ def main():
     df = get_data_reg()
     l_reg = list(set(df['Region']))
     l_reg = [x for x in l_reg if str(x)!='nan']   
-    regiones = st.multiselect('Regiones', l_reg, l_reg, key=0)
+    regiones = st.multiselect('Regiones', l_reg, ['Antofagasta','Coquimbo','Metropolitana','Magallanes'], key=0)
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=0)
     fig = my_plot_reg(df, regiones, op)
@@ -81,7 +82,12 @@ def main():
     df_reg = df[df['Region']==reg].reset_index(drop=True)
 
     l_comunas = list(set(df_reg['Comuna']))
-    comunas = st.multiselect('Comunas', l_comunas, l_comunas, key=1)
+
+    cant = len(l_comunas)
+    if cant > 20:
+        cant = 20
+
+    comunas = st.multiselect('Comunas', l_comunas, l_comunas[:cant], key=1)
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=1)
     fig = my_plot(df, comunas, op)
