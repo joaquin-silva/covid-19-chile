@@ -35,36 +35,6 @@ def data_nacionales():
     df['Fecha'] = [datetime.datetime.strptime(f, '%Y-%m-%d') for f in df['Fecha']]
     return df
 
-def report_data(df):
-    data = pd.DataFrame(columns=['Fecha reporte','Casos nuevos','Nuevos fallecidos','Positividad','Test informados','Ventiladores disponibles','Ventiladores ocupados','Pacientes críticos'])
-    index = df.shape[0] - 1
-    for i in range(4):
-        data.loc[i] = [df[col][index] for col in list(data.columns)]
-        index -= 7
-    
-    data.index=['Último reporte','Reporte hace 7 días','Reporte hace 14 días','Reporte hace 21 días']
-    return data
-
-def report(df):
-    df = df[['Fecha reporte','Casos nuevos','Nuevos fallecidos','Positividad','Test informados','Ventiladores disponibles','Ventiladores ocupados','Pacientes críticos']]
-    df = df.tail(8)
-    df = df.iloc[::-1].reset_index(drop=True)
-    return df
-
-def write_text(data):
-    columns = ['Casos nuevos','Nuevos fallecidos','Test informados','Ventiladores ocupados','Pacientes críticos']
-    names = ['casos','fallecidos','test','ventiladores ocupados','pacientes críticos']
-    for i in range(len(columns)):
-        dif = data[columns[i]][1] - data[columns[i]][0]
-        p = 100*(1-data[columns[i]][0]/data[columns[i]][1])
-        if dif > 0:
-            txt = f'- En el último reporte se informaron {int(dif)} {names[i]} menos (-{round(p,1)}%) que hace una semana.'
-        elif dif < 0:
-            txt = f'- En el último reporte se informaron {-int(dif)} {names[i]} más (+{round(-p,1)}%) que hace una semana.'
-        elif dif == 0:
-            txt = '- En el último reporse se informaron la misma cantidad de casos que hace una semana.'
-        st.markdown(txt)
-
 def my_plot(df, col, referencia, tipo):
     df = df.tail(40).reset_index(drop=True)
 
@@ -154,6 +124,39 @@ def my_join():
     
     return df
 
+def my_plot_2(df, col):
+    media_movil = df[col].rolling(7).mean()
+
+    fig = go.Figure(go.Scatter(
+        x=df['Fecha reporte'],
+        y=df[col],
+        marker_color='cadetblue',
+        name=col
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=df['Fecha reporte'],
+        y=media_movil,
+        marker_color='red',
+        name='Media móvil 7 días'
+    ))
+
+    fig.update_layout(
+        xaxis_title='Fecha',
+        yaxis_title=col,
+        template='ggplot2',
+        legend=dict(
+            orientation="h",
+            x=1,
+            xanchor="right",
+            y=1.02,
+            yanchor="bottom",
+            font=dict(size=12),
+        )
+    )
+
+    return fig
+
 def main():
     df = my_join()    
 
@@ -189,13 +192,15 @@ def main():
     fig = my_plot(df, ind, referencia, tipo)
     st.plotly_chart(fig, use_container_width=True)
 
-    st.header('Últimos reportes')
-    #data = report(df)
-    st.table(df.tail(8).iloc[::-1])
+    st.header('Gráfico')
+    cols = list(df.columns[1:])
+    for c in cols:
+        if c.split()[0] == 'Media':
+            cols.remove(c)
 
-    #st.header('Reportes por semana')
-    #data = report_data(df)
-    #st.table(data)
+    col = st.selectbox('Columna', cols)
+    fig = my_plot_2(df, col)
+    st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")

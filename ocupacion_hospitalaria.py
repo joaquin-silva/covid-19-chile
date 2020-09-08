@@ -41,7 +41,7 @@ def my_plot_vmi(df):
     fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi covid19 confirmados'], name='VMI Covid-19 confirmado', stackgroup='one', marker_color='red'))
     fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi covid19 sospechosos'], name='VMI Covid-19 sospechoso', stackgroup='one', marker_color='orange'))
     fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi otro'], name='VMI Otro',stackgroup='one', marker_color='steelblue'))
-    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi totales'], name='VMI Totales', marker_color='gray'))
+    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi totales'], name='VMI Totales', marker_color='silver'))
     fig.update_layout(
         title="Ocupación de Ventiladores Mecánicos Invasivos (VMI)",
         xaxis_title="Fecha",

@@ -84,7 +84,15 @@ def deaths_genre_plot(df):
         barmode='group',
         title_text="Defunciones COVID-19 confirmado + sospechoso",
         xaxis_title="Grupo etario",
-        yaxis_title="Cantidad de fallecidos"
+        yaxis_title="Cantidad de fallecidos",
+        legend=dict(
+            orientation="h",
+            x=1,
+            xanchor="right",
+            y=1.02,
+            yanchor="bottom",
+            font=dict(size=12),
+        )
     )
     return fig
 
@@ -159,7 +167,15 @@ def my_plot_3(df):
         title_text="Defunciones Covid-19 confirmado y sospechoso",
         barmode="stack",
         xaxis_title="Fecha",
-        yaxis_title="Defunciones"
+        yaxis_title="Defunciones",
+        legend=dict(
+            orientation="h",
+            x=1,
+            xanchor="right",
+            y=1.02,
+            yanchor="bottom",
+            font=dict(size=12),
+        )
     )
     return fig
 
@@ -185,7 +201,7 @@ def my_plot_4(df):
         template='ggplot2',
         autosize=False,
         width=800,
-        height=1100,
+        height=1100
     )
     return fig
 
