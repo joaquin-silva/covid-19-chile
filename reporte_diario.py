@@ -158,7 +158,9 @@ def main():
     df = my_join()    
 
     st.title('Reporte Diario Nacional')
-    st.markdown(f"**Última actualización: {str(df['Fecha reporte'][df.shape[0]-1]).split()[0]}**")
+    d, m, y = str(df['Fecha reporte'][df.shape[0]-1]).split()[0].split('-')[::-1]
+    fecha = f'{d}-{m}-{y}'
+    st.markdown(f"**Última actualización: {fecha}**")
 
     st.sidebar.markdown('---')
     referencia = st.sidebar.selectbox('Referencia del indicador', ['Día anterior','7 días atrás','14 días atrás','21 días atrás'])
@@ -188,12 +190,12 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
 
     st.header('Últimos reportes')
-    data = report(df)
-    st.table(data)
+    #data = report(df)
+    st.table(df.tail(8).iloc[::-1])
 
-    st.header('Reportes por semana')
-    data = report_data(df)
-    st.table(data)
+    #st.header('Reportes por semana')
+    #data = report_data(df)
+    #st.table(data)
 
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
