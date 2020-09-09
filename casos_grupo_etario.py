@@ -43,10 +43,12 @@ def get_column_ine(df):
     data = pd.read_csv('https://raw.githubusercontent.com/joaquin-silva/covid-19-chile/master/data/datos_ine_proyecciones.csv',sep=';')
     data = data[['Edad','2020']]
     data['2020'] = [int(1000*x) for x in data['2020']]
-    data['Edad'][100] = 100
     l_grupo = []
     for i in range(data.shape[0]):
-        e = int(data['Edad'][i])
+        try:
+            e = int(data['Edad'][i])
+        except:
+            e = 100
         if e <= 4:
             grupo = '00 - 04 años'
         elif e <= 9:
@@ -79,7 +81,7 @@ def get_column_ine(df):
             grupo = '70 - 74 años'
         elif e <= 79:
             grupo = '75 - 79 años'
-        elif e <= 84:
+        else:
             grupo = '80 y más años'
         l_grupo.append(grupo)
 
