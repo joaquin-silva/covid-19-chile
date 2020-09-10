@@ -5,10 +5,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 import datetime
 
-@st.cache
 def get_data():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto16/CasosGeneroEtario_std.csv')
-    #df['Semana'] = [datetime.datetime.strptime(df["Fecha"][i], '%Y-%m-%d').date().isocalendar()[1] for i in range(df.shape[0])]
     data = df.groupby(['Fecha','Grupo de edad'], as_index=False).sum()
     data = data.sort_values(['Fecha','Grupo de edad'], ascending=True).reset_index(drop=True)
     data['Fecha'] = [datetime.datetime.strptime(f, '%Y-%m-%d') for f in data['Fecha']]
