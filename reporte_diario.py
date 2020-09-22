@@ -157,6 +157,34 @@ def my_plot_2(df, col):
 
     return fig
 
+@st.cache
+def get_data_reg():
+    df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/TotalesPorRegion_std.csv')
+    df = df.query('Categoria == "Casos nuevos totales" and Region != "Total"').reset_index(drop=True)
+    return df
+
+def my_plot_reg(df):
+    df = df[df['Fecha'] == max(df['Fecha'])]
+    df = df.sort_values('Total', ascending=False).reset_index(drop=True)
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        y=df['Region'][::-1],
+        x=df['Total'][::-1],
+        text=df['Total'][::-1],
+        textposition='inside',
+        orientation='h',
+        marker_color='steelblue'))
+
+    fig.update_layout(
+        title='Casos nuevos totales por región',
+        xaxis_title='Casos nuevos',
+        template='ggplot2',
+        height=800
+    )
+
+    return fig
+
 def main():
     df = my_join()    
 
@@ -181,6 +209,9 @@ def main():
         fig = my_plot(df, col, referencia, tipo)
         st.plotly_chart(fig, use_container_width=True)
 
+    df_reg = get_data_reg()
+    fig = my_plot_reg(df_reg)
+    st.plotly_chart(fig, use_container_width=True)
 
     st.header('Más indicadores')
 
