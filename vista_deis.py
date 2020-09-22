@@ -49,7 +49,7 @@ def my_plot(df, region):
 
     fig.update_layout(
         barmode='stack',
-        title_text=f'Porcentaje de defunciones en región {region}',
+        title_text=f'Porcentaje de defunciones según causa por grupo etario <br>en región {region}',
         xaxis_title='Porcentaje',
         yaxis_title='Grupo etario'
     )
@@ -205,6 +205,28 @@ def my_plot_4(df):
     )
     return fig
 
+def my_plot_5(df, meses, region):
+    df = df[df['mes'].isin(meses)]
+    data = df.groupby('causa',as_index=False).count()
+    data = data.rename(columns={"año": "cantidad"})
+    data = data[data.columns[:2]]
+    data['porcentaje'] = data['cantidad']/sum(data['cantidad'])
+    data['new_causa'] = [causa[:37] for causa in data['causa']]
+
+    fig = px.pie(
+        data,
+        values='porcentaje',
+        names='new_causa',
+        color_discrete_sequence=px.colors.qualitative.Set1
+        )
+    fig.update_traces(textposition='inside')
+    fig.update_layout(
+        uniformtext_minsize=12,
+        uniformtext_mode='hide',
+        title_text=f'Defunciones según causa básica en región {region}',
+        )
+    return fig
+
 def main():
     df = get_data()
     df_covid = df[df["causa"]=='COVID-19'].reset_index(drop=True)
@@ -232,12 +254,15 @@ def main():
     st.markdown('---')
     st.title('Porcentaje de defunciones por causa básica de muerte')
 
-    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto']
-    mes = st.multiselect('Elegir meses', meses, ['Junio','Julio'])
-    num_mes = [int(meses.index(m)) + 1 for m in mes] 
+    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre']
+    mes = st.multiselect('Elegir meses', meses, ['Junio','Julio','Agosto','Septiembre'])
+    num_meses = [int(meses.index(m)) + 1 for m in mes] 
+
+    fig = my_plot_5(df_reg, num_meses, reg)
+    st.plotly_chart(fig, use_container_width=True)
 
     try:
-        deaths, deaths_percentage = get_deaths(df_reg, reg, num_mes)
+        deaths, deaths_percentage = get_deaths(df_reg, reg, num_meses)
         fig = my_plot(deaths_percentage, reg)
         st.plotly_chart(fig, use_container_width=True) 
 
@@ -278,3 +303,6 @@ def main():
     group = my_groupby_4(df_reg_covid)
     fig = my_plot_4(group)
     st.plotly_chart(fig, use_container_width=True)
+
+if __name__ == "__main__":
+    main()
