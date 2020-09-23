@@ -34,6 +34,7 @@ def my_plot(df, start, end, col):
         xaxis_title="Fecha informe",
         template='ggplot2',
         autosize=False,
+        height=550
     )
     return fig
 

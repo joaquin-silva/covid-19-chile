@@ -20,6 +20,7 @@ def my_plot(df):
         title_text='Ocupación de camas hospitalarias',
         xaxis_title='Fecha',
         template='ggplot2',
+        height=550
         )
     return fig
 
@@ -47,7 +48,8 @@ def my_plot_vmi(df):
         xaxis_title="Fecha",
         yaxis_title="Ventiladores",
         template='ggplot2',
-        barmode='stack'
+        barmode='stack',
+        height=550
         )
     return fig
 
@@ -90,3 +92,6 @@ def main():
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
     st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
+
+if __name__ == "__main__":
+    main()

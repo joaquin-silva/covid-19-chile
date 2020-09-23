@@ -84,7 +84,10 @@ def grafico_nacional(dfs):
 
         i += 1
 
-    fig.update_layout(title_text='Defunciones inscritas en Chile',  xaxis_title='Número de semana')
+    fig.update_layout(
+        title_text='Defunciones inscritas en Chile',
+        xaxis_title='Número de semana',
+        height=550)
     return fig
 
 def grafica_region(dfs, region):
@@ -105,7 +108,10 @@ def grafica_region(dfs, region):
                     name=year,
                     marker_color=colors[i]))
         i += 1
-    fig.update_layout(title_text=f'Defunciones inscritas en Región {region}',  xaxis_title='Número de semana')
+    fig.update_layout(
+        title_text=f'Defunciones inscritas en Región {region}', 
+        xaxis_title='Número de semana',
+        height=550)
     return fig
 
 def main():

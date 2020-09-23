@@ -37,6 +37,7 @@ def my_plot(df, comunas, op):
         xaxis_title="Fecha",
         yaxis_title="Porcentaje Positividad",
         template='ggplot2',
+        height=550
     )
     return fig
 
@@ -61,6 +62,7 @@ def my_plot_reg(df, regiones, op):
         xaxis_title="Fecha",
         yaxis_title="Porcentaje Positividad",
         template='ggplot2',
+        height=550
     )
     return fig
 

@@ -152,7 +152,8 @@ def my_plot_2(df, col):
             y=1.02,
             yanchor="bottom",
             font=dict(size=12),
-        )
+        ),
+        height=550
     )
 
     return fig
@@ -180,7 +181,7 @@ def my_plot_reg(df):
         title='Casos nuevos totales por región',
         xaxis_title='Casos nuevos',
         template='ggplot2',
-        height=800
+        height=750
     )
 
     return fig

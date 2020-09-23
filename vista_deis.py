@@ -51,7 +51,8 @@ def my_plot(df, region):
         barmode='stack',
         title_text=f'Porcentaje de defunciones según causa por grupo etario <br>en región {region}',
         xaxis_title='Porcentaje',
-        yaxis_title='Grupo etario'
+        yaxis_title='Grupo etario',
+        height=550
     )
     return fig
 
@@ -90,7 +91,7 @@ def deaths_genre_plot(df):
         barmode='group',
         title_text="Defunciones COVID-19 confirmado + sospechoso",
         xaxis_title="Grupo etario",
-        yaxis_title="Cantidad de fallecidos",
+        yaxis_title="Defunciones",
         legend=dict(
             orientation="h",
             x=1,
@@ -98,7 +99,8 @@ def deaths_genre_plot(df):
             y=1.02,
             yanchor="bottom",
             font=dict(size=12),
-        )
+        ),
+        height=550
     )
     return fig
 
@@ -132,7 +134,8 @@ def my_plot_2(df, op):
     fig.update_layout(
     title_text="Defunciones por causa básica",
     xaxis_title="Fecha",
-    yaxis_title="Defunciones"
+    yaxis_title="Defunciones",
+    height=550
     )
     return fig
 
@@ -180,7 +183,8 @@ def my_plot_3(df):
             y=1.02,
             yanchor="bottom",
             font=dict(size=12),
-        )
+        ),
+        height=550
     )
     return fig
 
