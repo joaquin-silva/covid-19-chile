@@ -236,6 +236,42 @@ def my_plot_5(df, meses, region):
         )
     return fig
 
+def my_plot_6(df, meses, region):
+    df = df[df['mes'].isin(meses)]
+    data = df.groupby(['comuna','causa'],as_index=False).count()
+    data = data.rename(columns={"año": "cantidad"})
+    data = data[data.columns[:3]]
+    data['porcentaje'] = [100*data['cantidad'][i]/sum(data[data['comuna']==data['comuna'][i]]['cantidad']) for i in range(data.shape[0])]
+    data['new_causa'] = [causa[:37] for causa in data['causa']]
+    data = data.pivot(index='comuna', columns='new_causa', values='porcentaje')
+    try:
+        data = data.sort_values(by=['COVID-19'])
+    except:
+        _ = 0
+    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+    fig = go.Figure()
+    for i, col in enumerate(data.columns):
+        fig.add_trace(go.Bar(
+            y=data.index,
+            x=data[col],
+            name=str(col),
+            orientation='h',
+            marker_color=flatui[i]
+        ))
+
+    if data.shape[0] > 25:
+        height = 22*data.shape[0]
+    else:
+        height = 500
+
+    fig.update_layout(
+        barmode='stack',
+        title_text=f'Porcentaje de defunciones según causa por comuna <br>en región {region}',
+        xaxis_title='Porcentaje',
+        height=height
+    )
+    return fig
+
 def main():
     df = get_data()
     df_covid = df[df["causa"]=='COVID-19'].reset_index(drop=True)
@@ -267,7 +303,13 @@ def main():
     mes = st.multiselect('Elegir meses', meses, ['Junio','Julio','Agosto','Septiembre'])
     num_meses = [int(meses.index(m)) + 1 for m in mes] 
 
+    if st.button('Mostrar lista de causas básicas'):
+        st.table(pd.DataFrame(list(set(df_reg['causa'])),columns=['Causa básica']))
+
     fig = my_plot_5(df_reg, num_meses, reg)
+    st.plotly_chart(fig, use_container_width=True)
+
+    fig = my_plot_6(df_reg, num_meses, reg)
     st.plotly_chart(fig, use_container_width=True)
 
     try:
