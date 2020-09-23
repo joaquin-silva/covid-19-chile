@@ -8,7 +8,7 @@ import calendar
 import os
 
 import defunciones_registro
-import casos_covid
+import casos_region
 import vista_deis
 import ocupacion_hospitalaria
 import vista_icovid
@@ -46,7 +46,7 @@ if opt == "Defunciones Registro Civil":
     defunciones_registro.main()
 
 if opt == "Casos por región":
-    casos_covid.main()
+    casos_region.main()
 
 if opt == "Defunciones Deis":
     vista_deis.main()
