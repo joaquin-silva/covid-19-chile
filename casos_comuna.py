@@ -33,7 +33,8 @@ def new_cases_plot(df, op, op_data, op_plot):
         title=f'{op_data} por semana epidemiológica en {list(set(df["Comuna"]))[0]}',
         xaxis_title="Semana epidemiológica",
         yaxis_title="Casos",
-        template='ggplot2'
+        template='ggplot2',
+        height=550
     )
     return fig
 
@@ -55,7 +56,8 @@ def my_plot(df, comunas, op, op_data, op_plot):
         title=f'{op_data} por semana epidemiológica',
         xaxis_title="Semana epidemiológica",
         yaxis_title="Casos",
-        template='ggplot2'
+        template='ggplot2',
+        height=550
     )
     return fig
 
