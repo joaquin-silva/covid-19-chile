@@ -47,9 +47,9 @@ def my_plot(df, comunas, op, op_data, op_plot):
         else:
             y = aux['Casos confirmados']
         if op_plot == 'Barras':
-            fig.add_trace(go.Bar(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i]))
+            fig.add_trace(go.Bar(x=aux['Numero Semana'], y=y, name=comuna, marker_color=px.colors.qualitative.G10[i]))
         if op_plot == 'Lineas':
-            fig.add_trace(go.Scatter(x=aux['Numero Semana'], y=y, name=comuna, marker_color=colors[i], mode='lines'))
+            fig.add_trace(go.Scatter(x=aux['Numero Semana'], y=y, name=comuna, marker_color=px.colors.qualitative.G10[i], mode='lines'))
     fig.update_layout(
         barmode='group',
         title=f'{op_data} por semana epidemiológica',
@@ -89,7 +89,7 @@ def main():
     st.header('Comparación por comunas')
 
     comunas = list(set(df['Comuna']))
-    select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Las Condes','Punta Arenas'])
+    select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Puente Alto','Punta Arenas'])
     try:
         fig = my_plot(df, select, op, op_data, op_plot)
         st.plotly_chart(fig, use_container_width=True) 
