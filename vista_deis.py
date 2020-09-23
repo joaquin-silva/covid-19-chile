@@ -311,9 +311,8 @@ def main():
 
     st.markdown('---')
 
-    if st.checkbox('Mostrar gráfico de Porcentaje de defunciones según causa por comuna'):
-        fig = my_plot_6(df_reg, num_meses, reg)
-        st.plotly_chart(fig, use_container_width=True)
+    fig = my_plot_6(df_reg, num_meses, reg)
+    st.plotly_chart(fig, use_container_width=True)
 
     try:
         st.markdown('---')
