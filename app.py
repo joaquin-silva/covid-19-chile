@@ -35,9 +35,9 @@ opt = st.sidebar.radio("",
     "Casos por comuna",
     "Casos por edad",
     "Defunciones Registro Civil",
-    "Datos Deis",
+    "Defunciones Deis",
     "Ocupación Hospitalaria",
-    "Positivad Diaria",
+    "Positivad ICOVID",
     "Casos Activos"
     )
 )
@@ -48,13 +48,13 @@ if opt == "Defunciones Registro Civil":
 if opt == "Casos por región":
     casos_covid.main()
 
-if opt == "Datos Deis":
+if opt == "Defunciones Deis":
     vista_deis.main()
 
 if opt == "Ocupación Hospitalaria":
     ocupacion_hospitalaria.main()
 
-if opt == "Positivad Diaria":
+if opt == "Positivad ICOVID":
     vista_icovid.main()
 
 if opt == "Reporte Diario":
