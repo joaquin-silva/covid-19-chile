@@ -303,16 +303,20 @@ def main():
     mes = st.multiselect('Elegir meses', meses, ['Junio','Julio','Agosto','Septiembre'])
     num_meses = [int(meses.index(m)) + 1 for m in mes] 
 
-    if st.button('Mostrar lista de causas básicas'):
+    if st.checkbox('Mostrar lista de causas básicas'):
         st.table(pd.DataFrame(list(set(df_reg['causa'])),columns=['Causa básica']))
 
     fig = my_plot_5(df_reg, num_meses, reg)
     st.plotly_chart(fig, use_container_width=True)
 
-    fig = my_plot_6(df_reg, num_meses, reg)
-    st.plotly_chart(fig, use_container_width=True)
+    st.markdown('---')
+
+    if st.checkbox('Mostrar gráfico de Porcentaje de defunciones según causa por comuna'):
+        fig = my_plot_6(df_reg, num_meses, reg)
+        st.plotly_chart(fig, use_container_width=True)
 
     try:
+        st.markdown('---')
         deaths, deaths_percentage = get_deaths(df_reg, reg, num_meses)
         fig = my_plot(deaths_percentage, reg)
         st.plotly_chart(fig, use_container_width=True) 
