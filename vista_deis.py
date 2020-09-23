@@ -78,7 +78,13 @@ def deaths_genre_plot(df):
     colors = ['lightskyblue','steelblue']
     for i, genero in enumerate(["Mujer","Hombre"]):
         data_aux = data_deis_grouped[data_deis_grouped["genero"]==genero]
-        fig.add_trace(go.Bar(x=data_aux["edad"], y=data_aux["fallecidos"], name=genero, marker_color=colors[i]))
+        fig.add_trace(go.Bar(
+            x=data_aux["edad"],
+            y=data_aux["fallecidos"],
+            name=genero,
+            marker_color=colors[i],
+            text=data_aux["fallecidos"],
+            textposition='outside'))
 
     fig.update_layout(
         barmode='group',
@@ -107,7 +113,6 @@ def my_groupby(data):
 
 def my_plot_2(df, op):
     df = df.sort_values(by=['causa']).reset_index(drop=True)
-    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
     causas = list(set(df['causa']))
     for i, causa in enumerate(causas):
@@ -122,7 +127,7 @@ def my_plot_2(df, op):
             y=y,
             name=str(causa),
             mode='lines',
-            marker_color=flatui[i],
+            marker_color=px.colors.qualitative.Alphabet[i]
         ))
     fig.update_layout(
     title_text="Defunciones por causa básica",
