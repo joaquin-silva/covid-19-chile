@@ -17,8 +17,8 @@ def get_data():
         'new_cases':'Casos nuevos',
         'total_deaths':'Fallecidos totales',
         'new_deaths':'Fallecidos nuevos',
-        'new_test':'Test nuevos',
-        'total_test':'Test totales'})
+        'new_tests':'Test nuevos',
+        'total_tests':'Test totales'})
     return df
 
 def my_plot_1(df, paises, col, op):
