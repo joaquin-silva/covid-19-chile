@@ -36,7 +36,31 @@ def plot_mas_activos(data):
     )
     return fig
 
-def plot_reg(data):
+def plot_activos_region(df):
+    df = df[df['Fecha'] == max(df['Fecha'])]
+    data = df.groupby(by=['Region'], as_index=False).sum()
+    data = data[['Region','Casos activos']]
+    data = data.sort_values('Casos activos', ascending=False).reset_index(drop=True)
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        y=data['Region'][::-1],
+        x=data['Casos activos'][::-1],
+        text=data['Casos activos'][::-1],
+        textposition='inside',
+        orientation='h',
+        marker_color='steelblue'))
+
+    fig.update_layout(
+        title='Casos activos por región',
+        xaxis_title='Casos activos',
+        template='ggplot2',
+        height=750,
+    )
+    return fig
+
+
+def plot_comunas(data):
     fig = go.Figure()
     fig.add_trace(go.Bar(
         y=data['Comuna'][::-1],
@@ -52,7 +76,7 @@ def plot_reg(data):
         height = 500
 
     fig.update_layout(
-        title='Casos activos',
+        title='Casos activos por comuna',
         xaxis_title='Casos activos',
         template='ggplot2',
         height=height,
@@ -72,6 +96,9 @@ def main():
     - Casos activos a la fecha {fecha}.
     ''')
 
+    #fechas = sorted(list(set(df['Fecha'])))
+    #f = st.select_slider('Cambiar fecha de informe', options=fechas)
+
     st.header('Comunas con más casos activos')
     data = my_groupby(df)
 
@@ -81,11 +108,17 @@ def main():
     st.write('---')
     st.header('Casos activos por región')
 
+    fig = plot_activos_region(df)
+    st.plotly_chart(fig, use_container_width=True) 
+
+    st.write('---')
+    st.header('Casos activos por comuna')
+
     regiones = list(set(data['Region']))
     reg = st.selectbox('Región', regiones, index=regiones.index('Metropolitana'))
 
     data_reg = data[data['Region']==reg]
-    fig = plot_reg(data_reg)
+    fig = plot_comunas(data_reg)
     st.plotly_chart(fig, use_container_width=True) 
 
 
