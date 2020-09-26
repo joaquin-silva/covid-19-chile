@@ -16,6 +16,7 @@ import reporte_diario
 import casos_comuna
 import casos_activos
 import casos_grupo_etario
+import vista_mundial
 
 # cd Downloads\Python\Streamlit\Covid-19
 # streamlit run app.py    
@@ -38,7 +39,8 @@ opt = st.sidebar.radio("",
     "Defunciones Deis",
     "Ocupación Hospitalaria",
     "Positivad ICOVID",
-    "Casos Activos"
+    "Casos Activos",
+    "Vista mundial"
     )
 )
 
@@ -68,3 +70,6 @@ if opt == "Casos Activos":
 
 if opt == "Casos por edad":
     casos_grupo_etario.main()
+
+if opt == "Vista mundial":
+    vista_mundial.main()
