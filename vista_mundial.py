@@ -106,12 +106,13 @@ def main():
         st.write('Demasiados países seleccionados')
 
     st.markdown('---')
-    st.header('Última actualización')
+    st.header('Países más afectados')
     fecha = max(df['Fecha'])
     d, m, y = str(fecha).split()[0].split('-')[::-1]
     fecha = f'{d}-{m}-{y}'
     st.markdown(f"**Datos actualizados a la fecha: {fecha}**")
 
+    columns = ['Casos nuevos','Casos totales','Fallecidos nuevos','Fallecidos totales']
     col_select = st.selectbox("Elegir columna", columns, key=1)
 
     fig = my_plot_2(df, col_select)

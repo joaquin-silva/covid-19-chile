@@ -40,7 +40,7 @@ opt = st.sidebar.radio("",
     "Ocupación Hospitalaria",
     "Positivad ICOVID",
     "Casos Activos",
-    "Vista mundial"
+    "Vista Mundial"
     )
 )
 
@@ -71,5 +71,5 @@ if opt == "Casos Activos":
 if opt == "Casos por edad":
     casos_grupo_etario.main()
 
-if opt == "Vista mundial":
+if opt == "Vista Mundial":
     vista_mundial.main()
