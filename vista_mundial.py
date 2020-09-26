@@ -84,7 +84,7 @@ def my_plot_2(df, col):
 
 
 def main():
-    st.title('Vista mundial')
+    st.title('Vista Mundial')
 
     st.header('Evolución por países')
 
