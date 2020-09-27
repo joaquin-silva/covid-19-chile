@@ -31,7 +31,7 @@ def get_deaths(data_2020_raw, region, mes):
 
     # Acortar nombres demasiado largos
     deaths_percentage.columns = [causa[:37] for causa in deaths_percentage.columns]
-    return deaths, deaths_percentage
+    return deaths_percentage
 
 @st.cache
 def my_plot(df, region):
@@ -158,8 +158,8 @@ def my_groupby_3(data):
 def my_plot_3(df):
     colors = ['#d62728','#1f77b4']
     fig = go.Figure()
-    #causas = list(set(df['causa_detalle']))
-    causas = ['COVID-19 virus identificado','COVID-19 virus no identificado']
+    causas = list(set(df['causa_detalle']))[::-1]
+    #causas = ['COVID-19 virus identificado','COVID-19 virus no identificado']
     names = ['Covid-19 confirmado','Covid-19 sospechoso']
     for i, causa in enumerate(causas):
         aux = df[df['causa_detalle']==causa]
@@ -316,7 +316,7 @@ def main():
 
     try:
         st.markdown('---')
-        deaths, deaths_percentage = get_deaths(df_reg, reg, num_meses)
+        deaths_percentage = get_deaths(df_reg, reg, num_meses)
         fig = my_plot(deaths_percentage, reg)
         st.plotly_chart(fig, use_container_width=True) 
 
