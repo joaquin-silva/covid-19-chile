@@ -15,8 +15,8 @@ def get_data():
     data_2020_raw["nombre_mes"] = data_2020_raw['mes'].map(sent_to)
     return data_2020_raw
 
-@st.cache
 def get_deaths(data_2020_raw, region, mes):
+    data_2020_raw = data_2020_raw.dropna()
     age_groups = ['< 1','1 a 4','5 a 9','10 a 14','15 a 19','20 a 24','25 a 29','30 a 34','35 a 39','40 a 44','45 a 49','50 a 54','55 a 59','60 a 64','65 a 69','70 a 74','75 a 79','80 a 84','85 a 89','90 a 99','100 +']
     
     deaths = pd.DataFrame()
@@ -33,7 +33,6 @@ def get_deaths(data_2020_raw, region, mes):
     deaths_percentage.columns = [causa[:37] for causa in deaths_percentage.columns]
     return deaths_percentage
 
-@st.cache
 def my_plot(df, region):
     df = df.drop(['Total'])
     flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
@@ -314,16 +313,13 @@ def main():
     fig = my_plot_6(df_reg, num_meses, reg)
     st.plotly_chart(fig, use_container_width=True)
 
-    try:
-        st.markdown('---')
-        deaths_percentage = get_deaths(df_reg, reg, num_meses)
-        fig = my_plot(deaths_percentage, reg)
-        st.plotly_chart(fig, use_container_width=True) 
+    st.markdown('---')
+    deaths_percentage = get_deaths(df_reg, reg, num_meses)
+    fig = my_plot(deaths_percentage, reg)
+    st.plotly_chart(fig, use_container_width=True) 
 
-        if st.checkbox("Mostrar datos", value=False, key=0): 
-            st.write(deaths_percentage)  
-    except:
-        st.write('Se ha producido un error')
+    if st.checkbox("Mostrar datos", value=False, key=0): 
+        st.write(deaths_percentage)  
 
     st.markdown('---')
     st.title('Defunciones por género y grupo etario')
