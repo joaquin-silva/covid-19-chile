@@ -157,8 +157,9 @@ def my_groupby_3(data):
 def my_plot_3(df):
     colors = ['#d62728','#1f77b4']
     fig = go.Figure()
-    causas = list(set(df['causa_detalle']))[::-1]
-    #causas = ['COVID-19 virus identificado','COVID-19 virus no identificado']
+    causas = list(set(df['causa_detalle']))
+    if 'no' in causas[0]:
+        causas = causas[::-1]
     names = ['Covid-19 confirmado','Covid-19 sospechoso']
     for i, causa in enumerate(causas):
         aux = df[df['causa_detalle']==causa]
@@ -249,6 +250,16 @@ def my_plot_6(df, meses, region):
         _ = 0
     flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
+
+    if data.shape[0] > 20:
+        height = 22*data.shape[0]
+        op = st.checkbox("Mostrar todas las comunas", value=False)
+        if not op:
+            data = data.loc[data.index[-20:]]
+            height = 550
+    else:
+        height = 550
+
     for i, col in enumerate(data.columns):
         fig.add_trace(go.Bar(
             y=data.index,
@@ -257,11 +268,6 @@ def my_plot_6(df, meses, region):
             orientation='h',
             marker_color=flatui[i]
         ))
-
-    if data.shape[0] > 25:
-        height = 22*data.shape[0]
-    else:
-        height = 500
 
     fig.update_layout(
         barmode='stack',
