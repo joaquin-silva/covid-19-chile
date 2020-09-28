@@ -18,7 +18,8 @@ def get_data():
         'total_deaths':'Fallecidos totales',
         'new_deaths':'Fallecidos nuevos',
         'new_tests':'Test nuevos',
-        'total_tests':'Test totales'})
+        'total_tests':'Test totales',
+        'positive_rate':'Positividad'})
     return df
 
 def my_plot_1(df, paises, col, op):
@@ -86,6 +87,7 @@ def my_plot_2(df, col):
 def main():
     st.title('Vista Mundial')
 
+    st.markdown('Datos provistos por [Our World in Data](https://github.com/owid/covid-19-data/tree/master/public/data).')
     st.header('Evolución por países')
 
     df = get_data()
@@ -94,7 +96,7 @@ def main():
     paises = list(set(df['País']))
     pais_select = st.multiselect('Seleccionar países', paises, ['Chile','Argentina','Peru'])
 
-    columns = ['Casos nuevos','Casos totales','Fallecidos nuevos','Fallecidos totales','Test nuevos','Test totales']
+    columns = ['Casos nuevos','Casos totales','Fallecidos nuevos','Fallecidos totales','Test nuevos','Test totales','Positividad']
     col_select = st.selectbox("Elegir columna", columns, key=0)
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=0)
