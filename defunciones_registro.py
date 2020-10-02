@@ -7,62 +7,17 @@ import datetime
 
 @st.cache
 def get_data():
-    df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto32/Defunciones_T.csv')
-    reg = list(df.columns)
-    dicc = {}
-    for i,r in enumerate(reg):
-        if i == 0:
-            dicc[r] = 'Fecha'
-        else:
-            dicc[r] = df[r][1]
-
-    df = df.rename(dicc, axis='columns')
-    df = df.drop([0,1,2])
-    df = df.reset_index(drop=True)
+    df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto32/Defunciones_std.csv')
     df["Año"] = [df["Fecha"][i].split("-")[0] for i in range(df.shape[0])]
     df["Mes"] = [df["Fecha"][i].split("-")[1] for i in range(df.shape[0])]
     df["Dia"] = [df["Fecha"][i].split("-")[2] for i in range(df.shape[0])]
-
-    dicc_regiones = {}
-    for n, k in dicc.items():
-        reg = n.split('.')[0]
-        dicc_regiones[reg] = []
-
-    for n, k in dicc.items():
-        reg = n.split('.')[0]
-        dicc_regiones[reg].append(k)
-
-    dicc_regiones.pop("Region")
-
     df = df[[int(df['Año'][i])>=2016 for i in range(df.shape[0])]].reset_index(drop=True)
     l_semana = [datetime.datetime.strptime(df["Fecha"][i], '%Y-%m-%d').date().isocalendar()[1] for i in range(df.shape[0])]
     df['Semana'] = l_semana
 
-    l_year = []
-    l_semana = []
-    l_region = []
-    l_comuna = []
-    l_def = []
-    #dfs = pd.DataFrame(columns=["Año","Semana","Region","Comuna","Defunciones"])
-    grouped = df.groupby(["Año","Semana"])
-    for name, group in grouped: 
-        for reg, comunas in dicc_regiones.items():
-            for comuna in comunas:
-                #dfs.loc[dfs.shape[0]] = [name[0],name[1],reg,comuna,sum(group[comuna])]
-                l_year.append(name[0])
-                l_semana.append(name[1])
-                l_region.append(reg)
-                l_comuna.append(comuna)
-                l_def.append(np.sum(group[comuna]))
-
-    dfs = pd.DataFrame()
-    dfs["Año"] = l_year
-    dfs["Semana"] = l_semana
-    dfs["Region"] = l_region
-    dfs["Comuna"] = l_comuna
-    dfs["Defunciones"] = l_def
-
-    return dfs
+    data = df.groupby(['Año','Semana','Region','Comuna'],as_index=False).sum()
+    data = data.drop(columns=['Codigo region','Codigo comuna'])
+    return data
 
 def grafico_nacional(dfs):
     fig = go.Figure()
@@ -137,3 +92,6 @@ def main():
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
     st.markdown("Datos: [Ministerio de Ciencia](https://github.com/MinCiencia/Datos-COVID19)")
+
+if __name__ == "__main__":
+    main()
