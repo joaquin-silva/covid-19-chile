@@ -1,11 +1,4 @@
 import streamlit as st
-import numpy as np
-import pandas as pd
-import plotly.graph_objects as go
-import plotly.express as px
-import datetime
-import calendar
-import os
 
 import defunciones_registro
 import casos_region
@@ -19,7 +12,7 @@ import casos_grupo_etario
 import vista_mundial
 
 # cd Downloads\Python\Streamlit\Covid-19
-# streamlit run app.py    
+# streamlit run app.py   
 
 # Config
 st.beta_set_page_config(
