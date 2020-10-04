@@ -28,8 +28,6 @@ st.beta_set_page_config(
  	initial_sidebar_state="expanded",
 )
 
-st.write('HOLA')
-
 # Sidebar   
 st.sidebar.title('Navegación')
 opt = st.sidebar.radio("",
