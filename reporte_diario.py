@@ -47,10 +47,12 @@ def my_plot(df, col, referencia, tipo):
     elif referencia == '21 días atrás':
         ref = df[col][df.shape[0]-22]
 
-    if tipo == 'Diferencia':
-        delta = {"reference": ref}
-    elif tipo == 'Porcentaje':
-        delta = {"reference": ref, "relative": True}
+    increasing = {"color":"#FF4136"}
+    decreasing = {"color":"#3d914e"}
+    delta = {"reference":ref, "increasing":increasing, "decreasing":decreasing}
+    
+    if tipo == 'Porcentaje':
+        delta["relative"] = True
 
     fig = go.Figure(go.Indicator(
         mode = "number+delta",
