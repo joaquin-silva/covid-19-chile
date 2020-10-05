@@ -19,7 +19,11 @@ def get_data():
         'new_deaths':'Fallecidos nuevos',
         'new_tests':'Test nuevos',
         'total_tests':'Test totales',
-        'positive_rate':'Positividad'})
+        'positive_rate':'Positividad',
+        'total_cases_per_million':'Casos totales por millón',
+        'new_cases_per_million':'Casos nuevos por millón',
+        'total_deaths_per_million':'Fallecidos totales por millón',
+        'new_deaths_per_million':'Fallecidos nuevos por millón'})
     return df
 
 def my_plot_1(df, paises, col, op):
@@ -96,7 +100,19 @@ def main():
     paises = list(set(df['País']))
     pais_select = st.multiselect('Seleccionar países', paises, ['Chile','Argentina','Peru'])
 
-    columns = ['Casos nuevos','Casos totales','Fallecidos nuevos','Fallecidos totales','Test nuevos','Test totales','Positividad']
+    columns = [
+        'Casos nuevos',
+        'Casos nuevos por millón',
+        'Casos totales',
+        'Casos totales por millón'
+        'Fallecidos nuevos',
+        'Fallecidos nuevos por millón',
+        'Fallecidos totales',
+        'Fallecidos totales por millón',
+        'Test nuevos',
+        'Test totales',
+        'Positividad']
+
     col_select = st.selectbox("Elegir columna", columns, key=0)
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=0)
@@ -114,7 +130,16 @@ def main():
     fecha = f'{d}-{m}-{y}'
     st.markdown(f"**Datos actualizados a la fecha: {fecha}**")
 
-    columns = ['Casos nuevos','Casos totales','Fallecidos nuevos','Fallecidos totales']
+    columns = [
+        'Casos totales',
+        'Casos totales por millón',
+        'Casos nuevos',
+        'Casos nuevos por millón',
+        'Fallecidos totales',
+        'Fallecidos totales por millón'
+        'Fallecidos nuevos',
+        'Fallecidos nuevos por millón',
+        ]
     col_select = st.selectbox("Elegir columna", columns, key=1)
 
     fig = my_plot_2(df, col_select)
