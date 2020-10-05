@@ -128,7 +128,7 @@ def main():
     fecha = max(df['Fecha'])
     d, m, y = str(fecha).split()[0].split('-')[::-1]
     fecha = f'{d}-{m}-{y}'
-    st.markdown(f"**Datos actualizados a la fecha: {fecha}**")
+    st.warning(f"Datos actualizados a la fecha: {fecha}")
 
     columns = [
         'Casos totales',
