@@ -73,7 +73,7 @@ def my_plot_2(df, col):
     fig.add_trace(go.Bar(
         y=df['País'][::-1],
         x=df[col][::-1],
-        text=df[col][::-1],
+        text=np.round(df[col][::-1],0),
         textposition='inside',
         orientation='h',
         marker_color='steelblue'))
