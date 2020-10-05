@@ -194,7 +194,7 @@ def main():
     st.title('Reporte Diario Nacional')
     d, m, y = str(df['Fecha reporte'][df.shape[0]-1]).split()[0].split('-')[::-1]
     fecha = f'{d}-{m}-{y}'
-    st.markdown(f"**Última actualización: {fecha}**")
+    st.warning(f"Última actualización: {fecha}")
 
     st.sidebar.markdown('---')
     referencia = st.sidebar.selectbox('Referencia del indicador', ['Día anterior','7 días atrás','14 días atrás','21 días atrás'])
