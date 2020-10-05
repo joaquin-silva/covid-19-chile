@@ -33,9 +33,8 @@ def get_deaths(data_2020_raw, region, mes):
     deaths_percentage.columns = [causa[:37] for causa in deaths_percentage.columns]
     return deaths_percentage
 
-def my_plot(df, region):
+def my_plot(df, region, colors):
     df = df.drop(['Total'])
-    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
     fig = go.Figure()
     for i, col in enumerate(df.columns):
         fig.add_trace(go.Bar(
@@ -43,7 +42,7 @@ def my_plot(df, region):
             x=df[col],
             name=str(col),
             orientation='h',
-            marker_color=flatui[i]
+            marker_color=colors[i]
         ))
 
     fig.update_layout(
@@ -112,7 +111,7 @@ def my_groupby(data):
     df['causa'] = [causa[:37] for causa in df['causa']]
     return df
 
-def my_plot_2(df, op):
+def my_plot_2(df, op, colors):
     df = df.sort_values(by=['causa']).reset_index(drop=True)
     fig = go.Figure()
     causas = list(set(df['causa']))
@@ -128,7 +127,8 @@ def my_plot_2(df, op):
             y=y,
             name=str(causa),
             mode='lines',
-            marker_color=px.colors.qualitative.Alphabet[i]
+            #marker_color=px.colors.qualitative.Alphabet[i],
+            marker_color=colors[i]
         ))
     fig.update_layout(
     title_text="Defunciones por causa básica",
@@ -236,7 +236,7 @@ def my_plot_5(df, meses, region):
         )
     return fig
 
-def my_plot_6(df, meses, region):
+def my_plot_6(df, meses, region, colors):
     df = df[df['mes'].isin(meses)]
     data = df.groupby(['comuna','causa'],as_index=False).count()
     data = data.rename(columns={"año": "cantidad"})
@@ -248,7 +248,7 @@ def my_plot_6(df, meses, region):
         data = data.sort_values(by=['COVID-19'])
     except:
         _ = 0
-    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+
     fig = go.Figure()
 
     if data.shape[0] > 20:
@@ -266,7 +266,7 @@ def my_plot_6(df, meses, region):
             x=data[col],
             name=str(col),
             orientation='h',
-            marker_color=flatui[i]
+            marker_color=colors[i]
         ))
 
     fig.update_layout(
@@ -280,6 +280,8 @@ def my_plot_6(df, meses, region):
 def main():
     df = get_data()
     df_covid = df[df["causa"]=='COVID-19'].reset_index(drop=True)
+
+    flatui = ['#d62728','#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
 
     st.sidebar.markdown('---')
     regiones = list(set(df['región']))
@@ -316,12 +318,12 @@ def main():
 
     st.markdown('---')
 
-    fig = my_plot_6(df_reg, num_meses, reg)
+    fig = my_plot_6(df_reg, num_meses, reg, flatui)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown('---')
     deaths_percentage = get_deaths(df_reg, reg, num_meses)
-    fig = my_plot(deaths_percentage, reg)
+    fig = my_plot(deaths_percentage, reg, flatui)
     st.plotly_chart(fig, use_container_width=True) 
 
     if st.checkbox("Mostrar datos", value=False, key=0): 
@@ -346,7 +348,7 @@ def main():
     df_reg = group[group['región']==reg]
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True)
-    fig = my_plot_2(df_reg, op)
+    fig = my_plot_2(df_reg, op, flatui)
     st.plotly_chart(fig, use_container_width=True)
 
     if st.checkbox("Mostrar datos", value=False, key=1): 
