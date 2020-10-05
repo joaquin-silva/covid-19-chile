@@ -136,7 +136,7 @@ def main():
         'Casos nuevos',
         'Casos nuevos por millón',
         'Fallecidos totales',
-        'Fallecidos totales por millón'
+        'Fallecidos totales por millón',
         'Fallecidos nuevos',
         'Fallecidos nuevos por millón',
         ]
