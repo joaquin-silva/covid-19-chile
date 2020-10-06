@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import datetime
 
-@st.cache
 def data_positividad():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto49/Positividad_Diaria_Media_T.csv')
     df['Fecha'] = [datetime.datetime.strptime(f, '%Y-%m-%d') for f in df['Fecha']]
@@ -13,14 +12,12 @@ def data_positividad():
     df['mediamovil_positividad'] = 100*df['mediamovil_positividad']
     return df
 
-@st.cache
 def data_ventiladores():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto20/NumeroVentiladores_T.csv')
     df = df.rename(columns={'Ventiladores':'Fecha'})
     df['Fecha'] = [datetime.datetime.strptime(f, '%Y-%m-%d') for f in df['Fecha']]
     return df
  
-@st.cache
 def data_criticos():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto23/PacientesCriticos_std.csv')
     df = df.rename(columns={'fecha':'Fecha','Casos confirmados':'criticos'})
@@ -28,7 +25,6 @@ def data_criticos():
     df = df[['Fecha','criticos']]
     return df
 
-@st.cache
 def data_nacionales():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto5/TotalesNacionales_T.csv')
     df['nuevos fallecidos'] = [df['Fallecidos'][i] - df['Fallecidos'][i-1] if df['Fallecidos'][i] > 0 else 0 for i in range(df.shape[0])]
@@ -160,7 +156,6 @@ def my_plot_2(df, col):
 
     return fig
 
-@st.cache
 def get_data_reg():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto3/TotalesPorRegion_std.csv')
     df = df.query('Categoria == "Casos nuevos totales" and Region != "Total"').reset_index(drop=True)
