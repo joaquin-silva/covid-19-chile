@@ -45,6 +45,11 @@ def my_plot(df, col, referencia, tipo):
 
     increasing = {"color":"#FF4136"}
     decreasing = {"color":"#3d914e"}
+
+    if col in ['Test informados','Ventiladores totales','Ventiladores disponibles']:
+        increasing = {"color":"#3d914e"}
+        decreasing = {"color":"#FF4136"}
+
     delta = {"reference":ref, "increasing":increasing, "decreasing":decreasing}
     
     if tipo == 'Porcentaje':
