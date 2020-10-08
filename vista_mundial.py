@@ -42,9 +42,11 @@ def my_plot_1(df, paises, col, op, log):
             y=y,
             name=pais,
             marker_color=px.colors.qualitative.G10[i],
-            log_y=log,
         ))
 
+    if log:
+        fig.update_yaxes(type="log")
+        
     if op:
         col = col + ' (Promedio móvil 7 días)'
 
