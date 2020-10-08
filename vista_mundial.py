@@ -26,7 +26,7 @@ def get_data():
         'new_deaths_per_million':'Fallecidos nuevos por millón'})
     return df
 
-def my_plot_1(df, paises, col, op):
+def my_plot_1(df, paises, col, op, log):
     fig = go.Figure()
     for i, pais in enumerate(paises):
         aux = df[df['País']==pais]
@@ -42,6 +42,7 @@ def my_plot_1(df, paises, col, op):
             y=y,
             name=pais,
             marker_color=px.colors.qualitative.G10[i],
+            log_y=log,
         ))
 
     if op:
@@ -117,8 +118,10 @@ def main():
 
     op = st.checkbox("Suavizar datos (Promedio móvil 7 días)", value=True, key=0)
 
+    log = st.checkbox("Escala logarítmica", value=False)
+
     try:
-        fig = my_plot_1(df, pais_select, col_select, op)
+        fig = my_plot_1(df, pais_select, col_select, op, log)
         st.plotly_chart(fig, use_container_width=True)
     except:
         st.write('Demasiados países seleccionados')
