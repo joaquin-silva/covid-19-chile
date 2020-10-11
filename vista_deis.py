@@ -42,7 +42,9 @@ def my_plot(df, region, colors):
             x=df[col],
             name=str(col),
             orientation='h',
-            marker_color=colors[i]
+            marker_color=colors[i],
+            text=np.round(df[col],1),
+            textposition='inside'
         ))
 
     fig.update_layout(
@@ -50,7 +52,7 @@ def my_plot(df, region, colors):
         title_text=f'Porcentaje de defunciones según causa por grupo etario <br>en región {region}',
         xaxis_title='Porcentaje',
         yaxis_title='Grupo etario',
-        height=550
+        height=600
     )
     return fig
 
@@ -158,7 +160,7 @@ def my_plot_3(df):
     colors = ['#d62728','#1f77b4']
     fig = go.Figure()
     causas = list(set(df['causa_detalle']))
-    if 'no' in causas[0]:
+    if 'no' in causas[0].lower():
         causas = causas[::-1]
     names = ['Covid-19 confirmado','Covid-19 sospechoso']
     for i, causa in enumerate(causas):
@@ -256,9 +258,9 @@ def my_plot_6(df, meses, region, colors):
         op = st.checkbox("Mostrar todas las comunas", value=False)
         if not op:
             data = data.loc[data.index[-20:]]
-            height = 550
+            height = 600
     else:
-        height = 550
+        height = 600
 
     for i, col in enumerate(data.columns):
         fig.add_trace(go.Bar(
@@ -266,7 +268,9 @@ def my_plot_6(df, meses, region, colors):
             x=data[col],
             name=str(col),
             orientation='h',
-            marker_color=colors[i]
+            marker_color=colors[i],
+            text=np.round(data[col],1),
+            textposition='inside'
         ))
 
     fig.update_layout(
@@ -306,7 +310,7 @@ def main():
     st.markdown('---')
     st.title('Porcentaje de defunciones por causa básica de muerte')
 
-    meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre']
+    meses = list(df['nombre_mes'].unique())
     mes = st.multiselect('Elegir meses', meses, ['Junio','Julio','Agosto','Septiembre'])
     num_meses = [int(meses.index(m)) + 1 for m in mes] 
 
