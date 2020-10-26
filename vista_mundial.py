@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import datetime
 
-@st.cache   
 def get_data():
     url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
     df = pd.read_csv(url)
