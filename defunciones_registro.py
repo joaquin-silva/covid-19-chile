@@ -69,7 +69,9 @@ def grafica_region(dfs, region):
         height=550)
     return fig
 
-def grafico_nacional_acumulado(dfs):
+def grafico_acumulado(dfs, region):
+    if region != 'Chile':
+        dfs = dfs[dfs['Region']==region]
     data = dfs.groupby("Año", as_index=False).sum()
     fig = go.Figure()
     fig.add_trace(go.Bar(
@@ -80,34 +82,18 @@ def grafico_nacional_acumulado(dfs):
         orientation='v',
         marker_color='steelblue'))
 
-    fig.update_layout(
-        title='Defunciones totales por año en Chile',
-        template='ggplot2',
-        height=450
-    )
-
-    return fig
-
-def grafico_region_acumulado(dfs, region):
-    dfs = dfs[dfs['Region']==region]
-    data = dfs.groupby("Año", as_index=False).sum()
-    fig = go.Figure()
-    fig.add_trace(go.Bar(
-        x=data['Año'],
-        y=data['Defunciones'],
-        text=data['Defunciones'],
-        textposition='inside',
-        orientation='v',
-        marker_color='steelblue'))
+    if region == 'Chile':
+        title = 'Defunciones totales por año en Chile'
+    else:
+        title = f'Defunciones totales por año en Región {region}'
 
     fig.update_layout(
-        title=f'Defunciones totales por año en Región {region}',
+        title=title,
         template='ggplot2',
+        xaxis_title='Año',
         height=450
     )
-
     return fig
-
 
 def main():
     st.title("Defunciones inscritas Registro Civil")
@@ -123,7 +109,7 @@ def main():
     fig = grafico_nacional(df)
     st.plotly_chart(fig, use_container_width=True)
 
-    fig = grafico_nacional_acumulado(df)
+    fig = grafico_acumulado(df, 'Chile')
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
@@ -134,7 +120,7 @@ def main():
     fig = grafica_region(df, reg)
     st.plotly_chart(fig, use_container_width=True) 
 
-    fig = grafico_region_acumulado(df, reg)
+    fig = grafico_acumulado(df, reg)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
