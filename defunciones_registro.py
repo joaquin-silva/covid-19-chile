@@ -81,9 +81,29 @@ def grafico_nacional_acumulado(dfs):
         marker_color='steelblue'))
 
     fig.update_layout(
-        title='Defunciones totales por año',
+        title='Defunciones totales por año en Chile',
         template='ggplot2',
-        height=750
+        height=450
+    )
+
+    return fig
+
+def grafico_region_acumulado(dfs, region):
+    dfs = dfs[dfs['Region']==region]
+    data = dfs.groupby("Año", as_index=False).sum()
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=data['Año'],
+        y=data['Defunciones'],
+        text=data['Defunciones'],
+        textposition='inside',
+        orientation='v',
+        marker_color='steelblue'))
+
+    fig.update_layout(
+        title=f'Defunciones totales por año en Región {region}',
+        template='ggplot2',
+        height=450
     )
 
     return fig
@@ -113,6 +133,9 @@ def main():
     reg = st.selectbox('Region', regiones, index=regiones.index('Metropolitana de Santiago'))
     fig = grafica_region(df, reg)
     st.plotly_chart(fig, use_container_width=True) 
+
+    fig = grafico_region_acumulado(df, reg)
+    st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
     st.markdown("Autor: [Joaquín Silva](https://github.com/joaquin-silva)")
