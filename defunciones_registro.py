@@ -70,9 +70,24 @@ def grafica_region(dfs, region):
     return fig
 
 def grafico_nacional_acumulado(dfs):
+    data = dfs.groupby("Año", as_index=False).sum()
     fig = go.Figure()
-    grouped = dfs.groupby("Año", as_index=False).sum()
-    st.write(grouped)
+    fig.add_trace(go.Bar(
+        x=data['Año'],
+        y=data['Defunciones'],
+        text=data['Defunciones'],
+        textposition='inside',
+        orientation='h',
+        marker_color='steelblue'))
+
+    fig.update_layout(
+        title='Defunciones totales por año',
+        template='ggplot2',
+        height=750
+    )
+
+    return fig
+
 
 def main():
     st.title("Defunciones inscritas Registro Civil")
@@ -88,8 +103,9 @@ def main():
     fig = grafico_nacional(df)
     st.plotly_chart(fig, use_container_width=True)
 
-    grafico_nacional_acumulado(df)
-
+    fig = grafico_nacional_acumulado(df)
+    st.plotly_chart(fig, use_container_width=True)
+    
     st.markdown("---")
 
     st.header('Regiones')
