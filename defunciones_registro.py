@@ -69,6 +69,11 @@ def grafica_region(dfs, region):
         height=550)
     return fig
 
+def grafico_nacional_acumulado(dfs):
+    fig = go.Figure()
+    grouped = dfs.groupby("Año").sum(as_index=False)
+    st.write(grouped)
+
 def main():
     st.title("Defunciones inscritas Registro Civil")
 
@@ -79,11 +84,15 @@ def main():
     if show_df:
         st.write(df.sort_values(by="Año"))
 
-    st.header('Gráfico Nacional')
+    st.header('Nacional')
     fig = grafico_nacional(df)
     st.plotly_chart(fig, use_container_width=True)
 
-    st.header('Gráfico por regiones')
+    grafico_nacional_acumulado(df)
+
+    st.markdown("---")
+
+    st.header('Regiones')
     regiones = list(set(df['Region']))
     reg = st.selectbox('Region', regiones, index=regiones.index('Metropolitana de Santiago'))
     fig = grafica_region(df, reg)
