@@ -71,7 +71,7 @@ def grafica_region(dfs, region):
 
 def grafico_nacional_acumulado(dfs):
     fig = go.Figure()
-    grouped = dfs.groupby("Año").sum(as_index=False)
+    grouped = dfs.groupby("Año", as_index=False).sum()
     st.write(grouped)
 
 def main():
