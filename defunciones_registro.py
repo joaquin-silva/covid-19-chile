@@ -77,7 +77,7 @@ def grafico_nacional_acumulado(dfs):
         y=data['Defunciones'],
         text=data['Defunciones'],
         textposition='inside',
-        orientation='h',
+        orientation='v',
         marker_color='steelblue'))
 
     fig.update_layout(
@@ -105,7 +105,7 @@ def main():
 
     fig = grafico_nacional_acumulado(df)
     st.plotly_chart(fig, use_container_width=True)
-    
+
     st.markdown("---")
 
     st.header('Regiones')
