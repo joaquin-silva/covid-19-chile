@@ -82,13 +82,10 @@ def main():
 	st.sidebar.markdown('---')
 
 	df = get_data()
-	options = list(df.columns) + ["Todas las regiones"]
+	options = list(df.columns)
 	region = st.sidebar.multiselect(
 		"Elegir regiones", options, ["Atacama", "Ñuble", "Magallanes"]
 	)
-
-	if region[0] == "Todas las regiones":
-		region = list(df.columns)
 
 	start_date = st.sidebar.date_input('Fecha de inicio', df.index[0])
 	end_date = st.sidebar.date_input('Fecha de término', df.index[-1])
