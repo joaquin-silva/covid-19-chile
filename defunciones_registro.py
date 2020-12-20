@@ -79,7 +79,6 @@ def grafico_acumulado(dfs, region):
         y=data['Defunciones'],
         text=data['Defunciones'],
         textposition='inside',
-        texttemplate='%{text:.3d}',
         orientation='v',
         marker_color='steelblue'))
 
