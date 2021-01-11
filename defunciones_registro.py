@@ -48,7 +48,7 @@ def grafico_nacional(dfs):
 def grafica_region(dfs, region):
     dfs = dfs[dfs['Region']==region]
     fig = go.Figure()
-    colors = ["seagreen","teal","deepskyblue","gray","red"]
+    colors = ["seagreen","teal","deepskyblue","gray","red","orange"]
     grouped = dfs.groupby("Año")
     i = 0
     for year, group in grouped:
