@@ -21,7 +21,7 @@ def get_data():
 
 def grafico_nacional(dfs):
     fig = go.Figure()
-    colors = ["seagreen","teal","deepskyblue","gray","red"]
+    colors = ["seagreen","teal","deepskyblue","gray","red","orange"]
     grouped = dfs.groupby("Año")
     i = 0
     for year, group in grouped:
