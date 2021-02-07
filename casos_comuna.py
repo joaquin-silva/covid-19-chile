@@ -15,7 +15,7 @@ def get_data():
 @st.cache
 def get_data_inicio_sintomas():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto15/FechaInicioSintomas_std.csv')
-    df['Numero Semana'] = [int(semana.split('SE')[1]) for semana in df['Semana Epidemiologica']]
+    df['Numero Semana'] = [int(semana) for semana in df['Semana Epidemiologica']]
     df['Casos 100 mil'] = 100000*df['Casos confirmados']/df['Poblacion']
     return df
 
