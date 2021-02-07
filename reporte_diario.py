@@ -93,7 +93,7 @@ def my_join():
         'Ventiladores totales',    
         'Ventiladores disponibles',
         'Ventiladores ocupados',
-        'Pacientes críticos',
+        'Pacientes Críticos',
         'Nuevos fallecidos',
         'Casos totales',
         'Fallecidos totales',
@@ -192,6 +192,7 @@ def main():
     df = my_join()    
 
     st.title('Reporte Diario Nacional')
+    st.write(df)
     d, m, y = str(df['Fecha reporte'][df.shape[0]-1]).split()[0].split('-')[::-1]
     fecha = f'{d}-{m}-{y}'
     st.warning(f"Última actualización: {fecha}")
