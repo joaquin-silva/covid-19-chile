@@ -74,14 +74,14 @@ def main():
     st.sidebar.markdown('Opciones')
 
     op_año = st.sidebar.selectbox('Año', [2020,2021])
-    df = df[df['Año']==op_año]
-
     op_data = st.sidebar.selectbox('Datos', ['Casos confirmados','Casos nuevos por fecha de inicio de síntomas'], key=0)
     
     if op_data == 'Casos confirmados':
         df = get_data()
     if op_data == 'Casos nuevos por fecha de inicio de síntomas':
         df = get_data_inicio_sintomas()
+
+    df = df[df['Año']==op_año]
 
     op_plot = st.sidebar.selectbox('Tipo gráfico', ['Lineas','Barras','Heatmap'])
     op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=0)
