@@ -20,9 +20,9 @@ def data_ventiladores():
  
 def data_criticos():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto23/PacientesCriticos_std.csv')
-    df = df.rename(columns={'fecha':'Fecha','Casos confirmados':'criticos'})
+    df = df.rename(columns={'fecha':'Fecha'})
     df['Fecha'] = [datetime.datetime.strptime(f, '%Y-%m-%d') for f in df['Fecha']]
-    df = df[['Fecha','criticos']]
+    df = df[['Fecha','Pacientes Críticos']]
     return df
 
 def data_nacionales():
