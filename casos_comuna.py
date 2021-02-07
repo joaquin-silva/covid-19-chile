@@ -72,6 +72,10 @@ def main():
     
     st.sidebar.markdown('---')
     st.sidebar.markdown('Opciones')
+
+    op_año = st.sidebar.selectbox('Año', [2020,2021])
+    df = df[df['Año']==op_año]
+
     op_data = st.sidebar.selectbox('Datos', ['Casos confirmados','Casos nuevos por fecha de inicio de síntomas'], key=0)
     
     if op_data == 'Casos confirmados':
@@ -79,14 +83,11 @@ def main():
     if op_data == 'Casos nuevos por fecha de inicio de síntomas':
         df = get_data_inicio_sintomas()
 
-    op_año = st.sidebar.selectbox('Año', [2020,2019])
     op_plot = st.sidebar.selectbox('Tipo gráfico', ['Lineas','Barras','Heatmap'])
     op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=0)
 
     comunas = list(set(df['Comuna']))
     select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Puente Alto','Punta Arenas'])
-
-    df = df[df['Año']==op_año]
 
     if op_plot != 'Heatmap':
         try:
