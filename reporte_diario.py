@@ -119,7 +119,7 @@ def my_join():
         'Media móvil positividad',
         'Test informados',
         'Casos activos',
-        'Pacientes críticos',
+        'Pacientes Críticos',
         'Ventiladores totales',    
         'Ventiladores disponibles',
         'Ventiladores ocupados'   
