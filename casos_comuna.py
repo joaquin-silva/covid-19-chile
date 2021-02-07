@@ -8,14 +8,16 @@ import datetime
 @st.cache
 def get_data():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto45/CasosConfirmadosPorComuna_std.csv')
-    df['Numero Semana'] = [int(semana) for semana in df['Semana Epidemiologica']]
+    df['Año'] = [int(semana[:4]) for semana in df['Semana Epidemiologica']]
+    df['Numero Semana'] = [int(semana[-2:]) for semana in df['Semana Epidemiologica']]
     df['Casos 100 mil'] = 100000*df['Casos confirmados']/df['Poblacion']
     return df
 
 @st.cache
 def get_data_inicio_sintomas():
     df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto15/FechaInicioSintomas_std.csv')
-    df['Numero Semana'] = [int(semana) for semana in df['Semana Epidemiologica']]
+    df['Año'] = [int(semana[:4]) for semana in df['Semana Epidemiologica']]
+    df['Numero Semana'] = [int(semana[-2:]) for semana in df['Semana Epidemiologica']]
     df['Casos 100 mil'] = 100000*df['Casos confirmados']/df['Poblacion']
     return df
 
@@ -77,11 +79,14 @@ def main():
     if op_data == 'Casos nuevos por fecha de inicio de síntomas':
         df = get_data_inicio_sintomas()
 
+    op_año = st.sidebar.selectbox('Año', [2020,2019])
     op_plot = st.sidebar.selectbox('Tipo gráfico', ['Lineas','Barras','Heatmap'])
     op = st.sidebar.checkbox('Ver casos por 100.000 habitantes', value=False, key=0)
 
     comunas = list(set(df['Comuna']))
     select = st.multiselect('Seleccionar comunas', comunas, ['Antofagasta','Puente Alto','Punta Arenas'])
+
+    df = df[df['Año']==op_año]
 
     if op_plot != 'Heatmap':
         try:
