@@ -17,7 +17,7 @@ def get_data():
         else:
             nuevos.append(data['Casos confirmados'][i] - data['Casos confirmados'][i-17])
     data['Casos nuevos'] = nuevos
-    data = data[data['Fecha'] != datetime.datetime(5,10,2020)]
+    data = data[data['Fecha'] != datetime.datetime(2020,10,5)]
     return data
 
 def my_plot(df, start, end, col):
