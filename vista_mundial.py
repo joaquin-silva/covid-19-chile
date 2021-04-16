@@ -23,6 +23,8 @@ def get_data():
         'new_cases_per_million':'Casos nuevos por millón',
         'total_deaths_per_million':'Fallecidos totales por millón',
         'new_deaths_per_million':'Fallecidos nuevos por millón'})
+
+    df = df[[df['País'][i] not in ['Europe','North America','Asia','European Union','South America','Oceania'] for in df.index]]
     return df
 
 def my_plot_1(df, paises, col, op, log):
