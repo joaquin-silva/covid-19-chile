@@ -25,30 +25,21 @@ def my_plot(df):
     return fig
 
 @st.cache
-def get_data_sochimi():
-    df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto48/SOCHIMI_std.csv')
-    df['Vmi otro'] = df['Vmi ocupados'] - df['Vmi covid19 confirmados'] - df['Vmi covid19 sospechosos']
-    df = df.drop(columns=['Codigo region'])
-    return df
+def get_data_uci():
+    df = pd.read_csv('https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto9/HospitalizadosUCIEtario_std.csv')
+    return df.pivot('fecha', 'Grupo de edad', 'Casos confirmados')
 
-def my_groupby_reg(df):
-    return df.groupby(['Fecha','Region'], as_index=False).sum()
-
-def my_groupby_nat(df):
-    return df.groupby(['Fecha'], as_index=False).sum()
-
-def my_plot_vmi(df):
+def my_plot_uci(df):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi covid19 confirmados'], name='VMI Covid-19 confirmado', stackgroup='one', marker_color='red'))
-    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi covid19 sospechosos'], name='VMI Covid-19 sospechoso', stackgroup='one', marker_color='orange'))
-    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi otro'], name='VMI Otro',stackgroup='one', marker_color='steelblue'))
-    fig.add_trace(go.Scatter(x=df['Fecha'], y=df['Vmi totales'], name='VMI Totales', marker_color='silver'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['<=39'], name='<=39', marker_color='green'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['40-49'], name='40-49', marker_color='royalblue'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['50-59'], name='50-59', marker_color='slategray'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['60-69'], name='60-69', marker_color='darkcyan'))
+    fig.add_trace(go.Scatter(x=df.index, y=df['>=70'], name='>=70', marker_color='orange'))
     fig.update_layout(
-        title="Ocupación de Ventiladores Mecánicos Invasivos (VMI)",
+        title="Pacientes UCI por edad",
         xaxis_title="Fecha",
-        yaxis_title="Ventiladores",
         template='ggplot2',
-        barmode='stack',
         height=550
         )
     return fig
@@ -64,29 +55,9 @@ def main():
         st.write(df) 
 
     st.markdown("---")
-    st.title('Encuesta SOCHIMI')
-
-    st.write('Datos de la encuesta diaria realidad nacional medicina intensiva provistos por el Ministerio de Ciencia en su [producto 48](https://github.com/MinCiencia/Datos-COVID19/tree/master/output/producto48).')
-   
-    df = get_data_sochimi()
-    regiones = list(set(df['Region']))
-    st.sidebar.markdown("---")
-    reg = st.sidebar.selectbox('Elegir Región', regiones, key=0, index=regiones.index('Metropolitana'))
-
-    if st.checkbox("Mostrar datos", value=False, key=1): 
-        st.write(df)
-
-    st.header('Ocupación de VMI Nacional')
-
-    data = my_groupby_nat(df)
-    fig = my_plot_vmi(data)
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.header(f'Ocupación de VMI en Región {reg}')
-    data = my_groupby_reg(df)
-    df_reg = data[data['Region']==reg]
-
-    fig = my_plot_vmi(df_reg)
+    st.title('Pacientes UCI por edad')
+    df = get_data_uci()
+    fig = my_plot_uci(df)
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
