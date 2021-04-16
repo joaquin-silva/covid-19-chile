@@ -18,7 +18,7 @@ def get_data():
             nuevos.append(data['Casos confirmados'][i] - data['Casos confirmados'][i-17])
     data['Casos nuevos'] = nuevos
     data = data[data['Fecha'] != datetime.datetime(2020,10,5)]
-    return data
+    return data.reset_index(drop=True)
 
 def my_plot(df, start, end, col):
     df = df[(df['Fecha'] >= str(start)) & (df['Fecha'] <= str(end))]
