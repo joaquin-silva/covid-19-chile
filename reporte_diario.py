@@ -137,11 +137,10 @@ def my_join():
     df = df[
         [
             "Fecha reporte",
-            "Casos nuevos",
+            "Casos nuevos totales",
             "Casos nuevos con síntomas",
             "Casos nuevos sin síntomas",
             "Media móvil casos nuevos",
-            "Casos nuevos totales",
             "Nuevos fallecidos",
             "Media móvil nuevos fallecidos",
             "Fallecidos totales",
