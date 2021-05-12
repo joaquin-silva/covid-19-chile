@@ -231,7 +231,6 @@ def my_plot_reg(df):
 
 def main():
     df = my_join()
-    st.write(df)
 
     st.title("Reporte Diario Nacional")
     d, m, y = str(df["Fecha reporte"][df.shape[0] - 1]).split()[0].split("-")[::-1]
