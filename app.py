@@ -12,29 +12,31 @@ import casos_grupo_etario
 import vista_mundial
 
 # cd Downloads\Python\Streamlit\Covid-19
-# streamlit run app.py   
+# streamlit run app.py
 
 # Config
 st.beta_set_page_config(
     page_title="Covid-19 Chile",
- 	layout="centered",
- 	initial_sidebar_state="expanded",
+    layout="centered",
+    initial_sidebar_state="expanded",
 )
 
-# Sidebar   
-st.sidebar.title('Navegación')
-opt = st.sidebar.radio("",
-    ("Reporte Diario",
-    "Casos por región",
-    "Casos por comuna",
-    "Casos por edad",
-    "Defunciones Registro Civil",
-    "Defunciones Deis",
-    "Ocupación Hospitalaria",
-    "Positivad ICOVID",
-    "Casos Activos",
-    "Vista Mundial"
-    )
+# Sidebar
+st.sidebar.title("Navegación")
+opt = st.sidebar.radio(
+    "",
+    (
+        "Reporte Diario",
+        "Casos por región",
+        "Casos por comuna",
+        "Casos por edad",
+        "Defunciones Registro Civil",
+        "Defunciones Deis",
+        "Ocupación Hospitalaria",
+        "Positivad ICOVID",
+        "Casos Activos",
+        "Vista Mundial",
+    ),
 )
 
 if opt == "Defunciones Registro Civil":
