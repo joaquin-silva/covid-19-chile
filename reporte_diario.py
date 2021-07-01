@@ -11,6 +11,7 @@ def data_positividad():
         "https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto49/Positividad_Diaria_Media_T.csv"
     )
     df["Fecha"] = [datetime.datetime.strptime(f, "%Y-%m-%d") for f in df["Fecha"]]
+    df = df.rename(columns={'positividad pcr':'positividad','mediamovil_positividad_pcr':'mediamovil_positividad'})
     df["positividad"] = 100 * df["positividad"]
     df["mediamovil_positividad"] = 100 * df["mediamovil_positividad"]
     return df
