@@ -116,7 +116,8 @@ def my_join():
     df.columns = [
         "Fecha reporte",
         "Test informados",
-        "Casos nuevos",
+        "Casos nuevos pcr",
+        "Casos nuevos ag",
         "Positividad",
         "Media móvil positividad",
         "Ventiladores totales",
