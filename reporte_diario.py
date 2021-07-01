@@ -133,7 +133,7 @@ def my_join():
         "Casos nuevos totales"
     ]
 
-    df["Media móvil casos nuevos"] = df["Casos nuevos"].rolling(7).mean()
+    df["Media móvil casos nuevos"] = df["Casos nuevos totales"].rolling(7).mean()
     df["Media móvil nuevos fallecidos"] = df["Nuevos fallecidos"].rolling(7).mean()
 
     df = df[
